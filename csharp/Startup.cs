@@ -15,14 +15,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection;
 using System.IO;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Cryptography.X509Certificates;
 
 namespace csharp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+        private readonly IHostingEnvironment env;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -30,26 +39,58 @@ namespace csharp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+            // Make all the urls lowercase as this is good web practice
+            services.AddRouting(options => options.LowercaseUrls = true);
+
+            if (env.IsProduction())
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+                // Use certificate passed in with docker for the key encryption
+                services.AddDataProtection()
+                        .SetApplicationName("api.syski.co.uk")
+                        .ProtectKeysWithCertificate(new X509Certificate2("/https/ssl.pfx", "password"))
+                        .PersistKeysToFileSystem(new DirectoryInfo("etc/keys"));
+            }             
 
-            services.AddDataProtection().SetApplicationName("api.syski.co.uk").PersistKeysToFileSystem(new DirectoryInfo("etc/keys"));
-
+            // Load the connection string from the settings file and use it for storing data
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))    
+                    );
+
+            // Add Identity to the application
             services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Java Web Tokens Authentication
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                    })
+                    .AddJwtBearer(cfg =>
+                    {
+                        cfg.RequireHttpsMetadata = true;
+                        cfg.SaveToken = true;
+                        cfg.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                            ValidateIssuer = true,
+                            ValidIssuer = Configuration["Jwt:Issuer"],
+                            ValidateAudience = true,
+                            ValidAudience = Configuration["Jwt:Issuer"],
+                            ValidateLifetime = true,
+                            ClockSkew = TimeSpan.FromMinutes(5)
+                        };
+                    });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, ApplicationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -62,14 +103,17 @@ namespace csharp
                 app.UseHsts();
             }
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            // Using Nginx As Reverse Proxy for Docker
+            if (env.IsProduction())
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+                app.UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                });
+            }
 
+            // Make sure HTTPS is used for the API
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseAuthentication();
 
@@ -79,6 +123,9 @@ namespace csharp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Ensure the database has been created
+            dbContext.Database.EnsureCreated();
         }
     }
 }
