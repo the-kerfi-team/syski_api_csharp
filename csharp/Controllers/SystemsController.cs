@@ -21,7 +21,7 @@ namespace csharp.Controllers
         }
 
         [HttpGet]
-        public List<SystemDTO> GetSystemsIndex()
+        public async Task<IActionResult> GetSystemsIndex()
         {
             var systems = _context.Systems.ToList();
 
@@ -32,13 +32,16 @@ namespace csharp.Controllers
                 systemDTOs.Add(CreateDTO(item));
             }
 
-            return systemDTOs;
+            return Ok(systemDTOs);
         }
 
         [HttpGet]
-        public SystemDTO GetSystem(Guid Id)
+        public async Task<IActionResult> GetSystem(Guid Id)
         {
-            return CreateDTO(_context.Systems.Find(Id));
+            if (await _context.Systems.FindAsync(Id) == null)
+                return NotFound();
+
+            return Ok(CreateDTO(await _context.Systems.FindAsync(Id)));
         }
 
         private SystemDTO CreateDTO(csharp.Data.System item)
