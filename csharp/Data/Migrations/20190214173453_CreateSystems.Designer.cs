@@ -3,33 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190214173453_CreateSystems")]
+    partial class CreateSystems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("csharp.Data.Architecture", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Architectures");
-                });
 
             modelBuilder.Entity("csharp.Data.Manufacturer", b =>
                 {
@@ -59,25 +49,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("csharp.Data.ProcessorModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<Guid>("ArchitectureId");
-
-                    b.Property<double>("ClockSpeed");
-
-                    b.Property<int>("CoreCount");
-
-                    b.Property<int>("ThreadCount");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArchitectureId");
-
-                    b.ToTable("ProcessorModels");
-                });
-
             modelBuilder.Entity("csharp.Data.System", b =>
                 {
                     b.Property<Guid>("Id")
@@ -94,19 +65,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("ModelId");
 
                     b.ToTable("Systems");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemCPU", b =>
-                {
-                    b.Property<Guid>("CPUModelID");
-
-                    b.Property<Guid>("SystemId");
-
-                    b.HasKey("CPUModelID", "SystemId");
-
-                    b.HasIndex("SystemId");
-
-                    b.ToTable("SystemCPUs");
                 });
 
             modelBuilder.Entity("csharp.Data.SystemModel", b =>
@@ -307,37 +265,11 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("csharp.Data.ProcessorModel", b =>
-                {
-                    b.HasOne("csharp.Data.Architecture", "Architecture")
-                        .WithMany("ProcessorModels")
-                        .HasForeignKey("ArchitectureId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("ProcessorModel")
-                        .HasForeignKey("csharp.Data.ProcessorModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("csharp.Data.System", b =>
                 {
                     b.HasOne("csharp.Data.SystemModel", "SystemModel")
                         .WithMany("Systems")
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemCPU", b =>
-                {
-                    b.HasOne("csharp.Data.ProcessorModel", "ProcessorModel")
-                        .WithMany("SystemCPUs")
-                        .HasForeignKey("CPUModelID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemCPUs")
-                        .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
