@@ -19,6 +19,6 @@ namespace csharp.Data
 
         public Architecture Architecture { get; set; }
 
-        public string version { get; set; }
+        public string Version { get; set; }
     }
 }
