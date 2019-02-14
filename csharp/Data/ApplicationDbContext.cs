@@ -89,6 +89,8 @@ namespace csharp.Data
                 .WithMany(a => a.SystemOSs)
                 .HasForeignKey(so => so.ArchitectureId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            SystemOS.HasKey(so => new { so.SystemId, so.OSId });
         }       
     }
 }
