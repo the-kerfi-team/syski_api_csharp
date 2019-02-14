@@ -35,7 +35,7 @@ namespace csharp.Controllers
             return Ok(systemDTOs);
         }
 
-        [HttpGet]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetSystem(Guid Id)
         {
             if (await _context.Systems.FindAsync(Id) == null)

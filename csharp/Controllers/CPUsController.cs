@@ -20,13 +20,13 @@ namespace csharp.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("{systemId}")]
         public async Task<IActionResult> GetCPUs (Guid systemId)
         {
             if (_context.Systems.Find(systemId) == null)
                 return NotFound();
 
-            var CPUs = _context.SystemCPUs.Where(c => c.SystemID == systemId).ToList();
+            var CPUs = _context.SystemCPUs.Where(sc => sc.SystemId == systemId).ToList();
 
             var CPUDTOs = new List<CPUDTO>();
 
@@ -40,14 +40,14 @@ namespace csharp.Controllers
 
         private CPUDTO CreateDTO(SystemCPU systemCPU)
         {
-            var processorModel = _context.ProcessorModels.Find(systemCPU.CPUModelId);
+            var processorModel = _context.ProcessorModels.Find(systemCPU.CPUModelID);
             var architecture = _context.Architectures.Find(processorModel.ArchitectureId);
             var model = _context.Models.Find(processorModel.Id);
             var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);
 
             var CPUDTO = new CPUDTO()
             {
-                Id = systemCPU.CPUModelId,
+                Id = systemCPU.CPUModelID,
                 ModelName = model.Name,
                 ManufacturerName = manufacturer.Name,
                 ArchitectureName = architecture.Name,
