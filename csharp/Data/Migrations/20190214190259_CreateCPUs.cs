@@ -61,13 +61,13 @@ namespace csharp.Data.Migrations
                         column: x => x.CPUModelID,
                         principalTable: "ProcessorModels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SystemCPUs_Systems_SystemId",
                         column: x => x.SystemId,
                         principalTable: "Systems",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
