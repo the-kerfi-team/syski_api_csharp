@@ -11,7 +11,7 @@ namespace csharp.Data
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<SystemType> SystemTypes { get; set; }
         public DbSet<Model> Models { get; set; }
-        public DbSet<SystemModel> SystemModel { get; set; }
+        public DbSet<SystemModel> SystemModels { get; set; }
         public DbSet<System> Systems { get; set; }
 
         public DbSet<Architecture> Architectures { get; set; }
