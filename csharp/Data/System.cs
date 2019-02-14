@@ -16,5 +16,7 @@ namespace csharp.Data
         public Guid ModelId { get; set; }
 
         public SystemModel SystemModel { get; set; }
+
+        public List<SystemCPU> SystemCPUs { get; set; }
     }
 }

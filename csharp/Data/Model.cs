@@ -16,5 +16,7 @@ namespace csharp.Data
         public Manufacturer Manufacturer { get; set; }
 
         public SystemModel SystemModel { get; set; }
+
+        public ProcessorModel ProcessorModel { get; set; }
     }
 }
