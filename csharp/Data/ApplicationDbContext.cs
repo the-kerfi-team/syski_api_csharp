@@ -14,6 +14,10 @@ namespace csharp.Data
         public DbSet<SystemModel> SystemModel { get; set; }
         public DbSet<System> Systems { get; set; }
 
+        public DbSet<Architecture> Architectures { get; set; }
+        public DbSet<ProcessorModel> ProcessorModels { get; set; }
+        public DbSet<SystemCPU> SystemCPUs { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {}
@@ -41,6 +45,29 @@ namespace csharp.Data
                 .HasOne(s => s.SystemModel)
                 .WithMany(sm => sm.Systems)
                 .HasForeignKey(s => s.ModelId);
+
+
+            var ProcessorModel = builder.Entity<ProcessorModel>();
+
+            ProcessorModel.HasOne(pm => pm.Architecture)
+                .WithMany(a => a.ProcessorModels)
+                .HasForeignKey(pm => pm.ArchitectureId);
+
+            ProcessorModel.HasOne(pm => pm.Model)
+                .WithOne(m => m.ProcessorModel)
+                .HasForeignKey<ProcessorModel>(pm => pm.Id);
+
+            var SystemCPU = builder.Entity<SystemCPU>();
+
+            SystemCPU.HasOne(sc => sc.System)
+                .WithMany(s => s.SystemCPUs)
+                .HasForeignKey(sc => sc.SystemId);
+
+            SystemCPU.HasOne(sc => sc.ProcessorModel)
+                .WithMany(pm => pm.SystemCPUs)
+                .HasForeignKey(sc => sc.CPUModelID);
+
+            SystemCPU.HasKey(sc => new { sc.CPUModelID, sc.SystemId });
         }       
     }
 }
