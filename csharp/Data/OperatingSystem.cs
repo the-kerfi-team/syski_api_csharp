@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace csharp.Data
 {
-    public class Architecture
+    public class OperatingSystem
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
-
-        public List<ProcessorModel> ProcessorModels { get; set; }
 
         public List<SystemOS> SystemOSs { get; set; }
     }

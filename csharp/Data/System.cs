@@ -18,5 +18,7 @@ namespace csharp.Data
         public SystemModel SystemModel { get; set; }
 
         public List<SystemCPU> SystemCPUs { get; set; }
+
+        public List<SystemOS> SystemOSs { get; set; }
     }
 }
