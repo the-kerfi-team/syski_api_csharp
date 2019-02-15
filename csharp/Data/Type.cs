@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace csharp.Data
 {
-    public class SystemType
+    public class Type
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
 
-        public List<SystemModel> SystemModels { get; set; }
+        public List<SystemModelType> SystemModelTypes { get; set; }
     }
 }

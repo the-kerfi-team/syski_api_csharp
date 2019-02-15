@@ -46,17 +46,26 @@ namespace csharp.Controllers
 
         private SystemDTO CreateDTO(csharp.Data.System item)
         {
-            var systemModel = _context.SystemModels.Find(item.ModelId);
-            var systemType = _context.SystemTypes.Find(systemModel.TypeId);
+            var systemModel = _context.SystemModels.Find(item.ModelId);           
             var model = _context.Models.Find(systemModel.Id);
             var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);
+
+            var systemModelTypes =  _context.SystemModelTypes
+                                            .Where(smt => smt.SystemModelId == systemModel.Id)
+                                            .ToList();
+
+            var types = new List<Data.Type>();
+            foreach(var systemModelType in systemModelTypes)
+            {
+                types.Add(_context.Types.Find(systemModelType.TypeId));
+            }
 
             var systemDTO = new SystemDTO()
             {
                 Id = item.Id,
                 ModelName = model.Name,
                 ManufacturerName = manufacturer.Name,
-                SystemType = systemType.Name,
+                Types = types,
                 HostName = item.HostName,
                 LastUpdated = item.LastUpdated
             };

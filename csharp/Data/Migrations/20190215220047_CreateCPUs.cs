@@ -25,7 +25,7 @@ namespace csharp.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ArchitectureId = table.Column<Guid>(nullable: false),
-                    ClockSpeed = table.Column<double>(nullable: false),
+                    ClockSpeed = table.Column<int>(nullable: false),
                     CoreCount = table.Column<int>(nullable: false),
                     ThreadCount = table.Column<int>(nullable: false)
                 },
@@ -37,13 +37,13 @@ namespace csharp.Data.Migrations
                         column: x => x.ArchitectureId,
                         principalTable: "Architectures",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProcessorModels_Models_Id",
                         column: x => x.Id,
                         principalTable: "Models",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

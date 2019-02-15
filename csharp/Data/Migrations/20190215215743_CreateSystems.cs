@@ -20,7 +20,7 @@ namespace csharp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SystemTypes",
+                name: "Types",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -28,7 +28,7 @@ namespace csharp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemTypes", x => x.Id);
+                    table.PrimaryKey("PK_Types", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,27 +51,44 @@ namespace csharp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SystemModel",
+                name: "SystemModels",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    TypeId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemModel", x => x.Id);
+                    table.PrimaryKey("PK_SystemModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SystemModel_Models_Id",
+                        name: "FK_SystemModels_Models_Id",
                         column: x => x.Id,
                         principalTable: "Models",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SystemModelTypes",
+                columns: table => new
+                {
+                    SystemModelId = table.Column<Guid>(nullable: false),
+                    TypeId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemModelTypes", x => new { x.SystemModelId, x.TypeId });
                     table.ForeignKey(
-                        name: "FK_SystemModel_SystemTypes_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "SystemTypes",
+                        name: "FK_SystemModelTypes_SystemModels_SystemModelId",
+                        column: x => x.SystemModelId,
+                        principalTable: "SystemModels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SystemModelTypes_Types_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Types",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,11 +104,11 @@ namespace csharp.Data.Migrations
                 {
                     table.PrimaryKey("PK_Systems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Systems_SystemModel_ModelId",
+                        name: "FK_Systems_SystemModels_ModelId",
                         column: x => x.ModelId,
-                        principalTable: "SystemModel",
+                        principalTable: "SystemModels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -100,8 +117,8 @@ namespace csharp.Data.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SystemModel_TypeId",
-                table: "SystemModel",
+                name: "IX_SystemModelTypes_TypeId",
+                table: "SystemModelTypes",
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
@@ -113,16 +130,19 @@ namespace csharp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "SystemModelTypes");
+
+            migrationBuilder.DropTable(
                 name: "Systems");
 
             migrationBuilder.DropTable(
-                name: "SystemModel");
+                name: "Types");
+
+            migrationBuilder.DropTable(
+                name: "SystemModels");
 
             migrationBuilder.DropTable(
                 name: "Models");
-
-            migrationBuilder.DropTable(
-                name: "SystemTypes");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");
