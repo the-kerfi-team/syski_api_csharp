@@ -18,9 +18,9 @@ namespace csharp.Data
         public DbSet<Architecture> Architectures { get; set; }
         public DbSet<ProcessorModel> ProcessorModels { get; set; }
         public DbSet<SystemCPU> SystemCPUs { get; set; }
-/*
+
         public DbSet<OperatingSystem> OperatingSystems { get; set; }
-        public DbSet<SystemOS> SystemOSs { get; set; }*/
+        public DbSet<SystemOS> SystemOSs { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -88,7 +88,7 @@ namespace csharp.Data
 
             SystemCPU.HasKey(sc => new { sc.CPUModelID, sc.SystemId });
 
-/*
+
             var SystemOS = builder.Entity<SystemOS>();
 
             SystemOS.HasOne(so => so.System)
@@ -106,7 +106,7 @@ namespace csharp.Data
                 .HasForeignKey(so => so.ArchitectureId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            SystemOS.HasKey(so => new { so.SystemId, so.OSId });*/
+            SystemOS.HasKey(so => new { so.SystemId, so.OSId });
         }       
     }
 }
