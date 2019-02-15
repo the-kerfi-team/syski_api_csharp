@@ -15,7 +15,7 @@ namespace csharp.Data
 
         public Architecture Architecture { get; set; }
 
-        public double ClockSpeed { get; set; }
+        public int ClockSpeed { get; set; }
 
         public int CoreCount { get; set; }
 
