@@ -33,8 +33,7 @@ namespace csharp.Data
             builder.Entity<Model>()
                 .HasOne(m => m.Manufacturer)
                 .WithMany(m => m.Models)
-                .HasForeignKey(m => m.ManufacturerId)
-                .IsRequired(false);
+                .HasForeignKey(m => m.ManufacturerId);
 
             builder.Entity<SystemModel>()
                 .HasOne(sm => sm.Model)
@@ -61,8 +60,6 @@ namespace csharp.Data
                 .WithMany(sm => sm.Systems)
                 .HasForeignKey(s => s.ModelId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            System.Property(s => s.LastUpdated).IsRequired(false);
 
 /*
             var ProcessorModel = builder.Entity<ProcessorModel>();
