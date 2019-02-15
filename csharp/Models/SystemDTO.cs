@@ -13,7 +13,7 @@ namespace csharp.Models
 
         public string ManufacturerName { get; set; }
 
-        public string SystemType { get; set; }
+        public List<Data.Type> Types { get; set; }
 
         public string HostName { get; set; }
 
