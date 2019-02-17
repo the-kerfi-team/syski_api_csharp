@@ -21,11 +21,20 @@ namespace csharp.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Token>()
-                   .HasOne(t => t.User)
-                   .WithMany(u => u.Tokens)
-                   .HasForeignKey(f => f.UserId)
-                   .IsRequired();
+            var Token = builder.Entity<Token>();
+
+            Token.HasOne(t => t.User)
+                .WithMany(u => u.Tokens)
+                .HasForeignKey(f => f.UserId)
+                .IsRequired();
+
+            Token.HasOne(t => t.NextToken)
+                .WithOne(t => t.PreviousToken)
+                .HasForeignKey<Token>(t => t.NextTokenId);
+
+            Token.HasOne(t => t.PreviousToken)
+                .WithOne(t => t.NextToken)
+                .HasForeignKey<Token>(t => t.PreviousTokenId);
 
         }
 
