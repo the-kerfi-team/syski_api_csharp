@@ -4,9 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using csharp.Data;
 using csharp.Models;
+using csharp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,22 +20,23 @@ using Microsoft.IdentityModel.Tokens;
 namespace csharp.Controllers
 {
     [ApiController]
-    public class AuthController : ControllerBase
+    public class UserAuthController : ControllerBase
     {
 
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserTokenManager _tokenManager;
 
-
-        public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public UserAuthController(UserManager<ApplicationUser> userManager, UserTokenManager tokenManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            _tokenManager = tokenManager;
             _configuration = configuration;
         }
 
         [HttpPost]
         [Route("/auth/user/login")]
-        public async Task<IActionResult> UserLogin([FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> UserLogin([FromBody] UserLoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -42,11 +46,13 @@ namespace csharp.Controllers
             var user = _userManager.Users.SingleOrDefault(r => r.Email == loginDTO.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, loginDTO.Password))
             {
+                string refreshToken = null;
+                Token token = _tokenManager.CreateToken(user, ref refreshToken);
                 return Ok(new UserTokenDTO()
                 {
-                    Username = user.UserName,
-                    Email = user.Email,
-                    Token = GenerateJwtToken(user)
+                    Email = token.User.Email,
+                    Token = GenerateJwtToken(token),
+                    RefreshToken = refreshToken
                 });
             }
 
@@ -55,14 +61,14 @@ namespace csharp.Controllers
 
         [HttpPost]
         [Route("/auth/user/register")]
-        public async Task<IActionResult> UserRegister([FromBody] RegisterDTO registerDTO)
+        public async Task<IActionResult> UserRegister([FromBody] UserRegisterDTO registerDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var newUser = new IdentityUser
+            var newUser = new ApplicationUser
             {
                 UserName = registerDTO.Email,
                 Email = registerDTO.Email
@@ -72,23 +78,44 @@ namespace csharp.Controllers
             if (result.Succeeded)
             {
                 var user = _userManager.Users.SingleOrDefault(r => r.Email == registerDTO.Email);
+                string refreshToken = null;
+                Token token = _tokenManager.CreateToken(user, ref refreshToken);
                 return Ok(new UserTokenDTO()
                 {
-                    Username = user.UserName,
-                    Email = user.Email,
-                    Token = GenerateJwtToken(user)
+                    Email = token.User.Email,
+                    Token = GenerateJwtToken(token),
+                    RefreshToken = refreshToken
                 });
             }
 
             return BadRequest();
         }
 
-        private string GenerateJwtToken(IdentityUser user)
+        [HttpPost]
+        [Route("/auth/user/token/refresh")]
+        [Authorize ("refreshtoken")]
+        public IActionResult UserRefreshToken([FromBody] UserRefreshTokenDTO refreshTokenDTO)
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var someClaim = claimsIdentity.FindFirst("jti").Value;
+            var user = _userManager.Users.SingleOrDefault(r => r.Email == claimsIdentity.FindFirst("email").Value);
+            // Test if the refresh token is valid
+            string refreshToken = null;
+            Token token = _tokenManager.CreateToken(user, ref refreshToken);
+            return Ok(new UserTokenDTO()
+            {
+                Email = token.User.Email,
+                Token = GenerateJwtToken(token),
+                RefreshToken = refreshToken
+            });
+        }
+
+        private string GenerateJwtToken(Token Token)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(JwtRegisteredClaimNames.Jti, Token.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, Token.User.Email)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -98,8 +125,9 @@ namespace csharp.Controllers
                 _configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddDays(Convert.ToDouble(_configuration["Jwt:ExpireDays"])),
-                notBefore: DateTime.Now,
+                //expires: DateTime.Now.AddDays(Convert.ToDouble(_configuration["Jwt:ExpireDays"])),
+                expires: Token.Expires,
+                notBefore: Token.NotBefore,
                 signingCredentials: creds
             );
 

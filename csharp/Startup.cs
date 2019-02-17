@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography.X509Certificates;
+using csharp.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace csharp
 {
@@ -57,7 +59,7 @@ namespace csharp
                     );
 
             // Add Identity to the application
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<ApplicationUser>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Java Web Tokens Authentication
@@ -69,7 +71,7 @@ namespace csharp
                         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
                     })
-                    .AddJwtBearer(cfg =>
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, cfg =>
                     {
                         cfg.RequireHttpsMetadata = true;
                         cfg.SaveToken = true;
@@ -80,13 +82,38 @@ namespace csharp
                             ValidateIssuer = true,
                             ValidIssuer = Configuration["Jwt:Issuer"],
                             ValidateAudience = true,
-                            ValidAudience = Configuration["Jwt:Issuer"],
+                            ValidAudiences = new string[] { Configuration["Jwt:Audience"] },
                             ValidateLifetime = true,
-                            ClockSkew = TimeSpan.FromMinutes(5)
+                            ClockSkew = TimeSpan.Zero
+                            //ClockSkew = TimeSpan.FromMinutes(5)
+                        };
+                    })
+                    .AddJwtBearer("refresh", cfg =>
+                    {
+                        cfg.RequireHttpsMetadata = true;
+                        cfg.SaveToken = true;
+                        cfg.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                            ValidateIssuer = true,
+                            ValidIssuer = Configuration["Jwt:Issuer"],
+                            ValidateAudience = true,
+                            ValidAudiences = new string[] { Configuration["Jwt:Audience"] },
+                            ValidateLifetime = false,
+                            ClockSkew = TimeSpan.Zero
+                            //ClockSkew = TimeSpan.FromMinutes(5)
                         };
                     });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("refreshtoken", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().AddAuthenticationSchemes("refresh").Build());
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<UserTokenManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -114,6 +141,8 @@ namespace csharp
 
             // Make sure HTTPS is used for the API
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 
