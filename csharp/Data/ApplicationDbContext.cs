@@ -10,7 +10,7 @@ namespace csharp.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
-        DbSet<Token> TheUserTokens { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

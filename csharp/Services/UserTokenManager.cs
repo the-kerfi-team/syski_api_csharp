@@ -47,15 +47,21 @@ namespace csharp.Services
         public Token CreateToken(ApplicationUser user, ref string refreshToken, string previousTokenId)
         {
             Token token = GenerateToken(user, ref refreshToken);
-            // Get previous token from database
-            //if (previousToken != null)
-            //{
-            //    SetPreviousToken(ref token, ref previousToken);
-            //}
-            token.PreviousTokenId = new Guid(previousTokenId);
+            var previousToken = _context.Tokens.FirstOrDefault(t => t.Id == new Guid(previousTokenId));
             _context.Add(token);
             _context.SaveChanges();
+            if (previousToken != null)
+            {
+                previousToken.Active = false;
+                SetPreviousToken(ref token, ref previousToken);
+                _context.SaveChanges();
+            }
             return token;
+        }
+
+        public bool CheckValidRefreshToken(string refreshToken, string tokenId)
+        {
+            return _context.Tokens.Where(t => t.Id == new Guid(tokenId) && t.Active && t.RefreshToken == refreshToken).Any();
         }
 
         private void SetPreviousToken(ref Token nextToken, ref Token previousToken)
@@ -83,7 +89,7 @@ namespace csharp.Services
                 Subject = user.Email,
                 Expires = DateTime.Now.AddMinutes(30),
                 NotBefore = DateTime.Now,
-                RefreshToken = GenerateHash(refreshToken),
+                RefreshToken = refreshToken,
                 Active = true
             };
             return (result);
@@ -97,25 +103,6 @@ namespace csharp.Services
                 rng.GetBytes(randomNumber);
                 return Convert.ToBase64String(randomNumber);
             }
-        }
-
-        public static string GenerateHash(string hash)
-        {
-            byte[] salt;
-            byte[] bytes;
-            if (hash == null)
-            {
-                throw new ArgumentNullException("Hash");
-            }
-            using (Rfc2898DeriveBytes rfc2898DeriveByte = new Rfc2898DeriveBytes(hash, 16, 1000))
-            {
-                salt = rfc2898DeriveByte.Salt;
-                bytes = rfc2898DeriveByte.GetBytes(32);
-            }
-            byte[] numArray = new byte[49];
-            Buffer.BlockCopy(salt, 0, numArray, 1, 16);
-            Buffer.BlockCopy(bytes, 0, numArray, 17, 32);
-            return Convert.ToBase64String(numArray);
         }
 
     }

@@ -97,17 +97,19 @@ namespace csharp.Controllers
         public IActionResult UserRefreshToken([FromBody] UserRefreshTokenDTO refreshTokenDTO)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            var someClaim = claimsIdentity.FindFirst("jti").Value;
-            var user = _userManager.Users.SingleOrDefault(r => r.Email == claimsIdentity.FindFirst("email").Value);
-            // Test if the refresh token is valid
-            string refreshToken = null;
-            Token token = _tokenManager.CreateToken(user, ref refreshToken);
-            return Ok(new UserTokenDTO()
+            if (_tokenManager.CheckValidRefreshToken(refreshTokenDTO.RefreshToken, claimsIdentity.FindFirst("jti").Value))
             {
-                Email = token.User.Email,
-                Token = GenerateJwtToken(token),
-                RefreshToken = refreshToken
-            });
+                var user = _userManager.Users.SingleOrDefault(r => r.Email == claimsIdentity.FindFirst("email").Value);
+                string refreshToken = null;
+                Token token = _tokenManager.CreateToken(user, ref refreshToken, claimsIdentity.FindFirst("jti").Value);
+                return Ok(new UserTokenDTO()
+                {
+                    Email = token.User.Email,
+                    Token = GenerateJwtToken(token),
+                    RefreshToken = refreshToken
+                });
+            }
+            return BadRequest();
         }
 
         private string GenerateJwtToken(Token Token)
