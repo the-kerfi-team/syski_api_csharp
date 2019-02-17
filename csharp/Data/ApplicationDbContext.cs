@@ -47,12 +47,10 @@ namespace csharp.Data
                 .WithOne(t => t.NextToken)
                 .HasForeignKey<Token>(t => t.PreviousTokenId);
 
-        }
-
-            builder.Entity<Model>()
-                .HasOne(m => m.Manufacturer)
-                .WithMany(m => m.Models)
-                .HasForeignKey(m => m.ManufacturerId);
+            builder.Entity<Model>() 
+                 .HasOne(m => m.Manufacturer)
+                 .WithMany(m => m.Models)
+                 .HasForeignKey(m => m.ManufacturerId);
 
             builder.Entity<SystemModel>()
                 .HasOne(sm => sm.Model)
@@ -126,6 +124,8 @@ namespace csharp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             SystemOS.HasKey(so => new { so.SystemId, so.OSId });
-        }       
+
+        }
+  
     }
 }

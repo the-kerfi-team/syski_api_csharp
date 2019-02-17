@@ -10,6 +10,10 @@
     <Compile Remove="Data\Migrations\20190212165422_InitialCreate.Designer.cs" />
     <Compile Remove="Data\Migrations\20190215220258_CreateCPs.cs" />
     <Compile Remove="Data\Migrations\20190215220258_CreateCPs.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190217161515_AddTokens.cs" />
+    <Compile Remove="Data\Migrations\20190217161515_AddTokens.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190217172713_Test.cs" />
+    <Compile Remove="Data\Migrations\20190217172713_Test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

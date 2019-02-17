@@ -8,7 +8,7 @@ namespace csharp.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TheUserTokens",
+                name: "Tokens",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -26,15 +26,15 @@ namespace csharp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TheUserTokens", x => x.Id);
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TheUserTokens_TheUserTokens_PreviousTokenId",
+                        name: "FK_Tokens_Tokens_PreviousTokenId",
                         column: x => x.PreviousTokenId,
-                        principalTable: "TheUserTokens",
+                        principalTable: "Tokens",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TheUserTokens_AspNetUsers_UserId",
+                        name: "FK_Tokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -42,22 +42,22 @@ namespace csharp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TheUserTokens_PreviousTokenId",
-                table: "TheUserTokens",
+                name: "IX_Tokens_PreviousTokenId",
+                table: "Tokens",
                 column: "PreviousTokenId",
                 unique: true,
                 filter: "[PreviousTokenId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TheUserTokens_UserId",
-                table: "TheUserTokens",
+                name: "IX_Tokens_UserId",
+                table: "Tokens",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TheUserTokens");
+                name: "Tokens");
         }
     }
 }
