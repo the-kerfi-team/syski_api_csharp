@@ -3,24 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190215220047_CreateCPUs")]
+    partial class CreateCPUs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-
-            modelBuilder.Entity("csharp.Data.ApplicationUser", b =>
 
             modelBuilder.Entity("csharp.Data.Architecture", b =>
                 {
@@ -60,18 +59,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("ManufacturerId");
 
                     b.ToTable("Models");
-                });
-
-            modelBuilder.Entity("csharp.Data.OperatingSystem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OperatingSystems");
                 });
 
             modelBuilder.Entity("csharp.Data.ProcessorModel", b =>
@@ -146,25 +133,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("SystemModelTypes");
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemOS", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<Guid>("OSId");
-
-                    b.Property<Guid>("ArchitectureId");
-
-                    b.Property<string>("Version");
-
-                    b.HasKey("SystemId", "OSId");
-
-                    b.HasIndex("ArchitectureId");
-
-                    b.HasIndex("OSId");
-
-                    b.ToTable("SystemOSs");
-                });
-
             modelBuilder.Entity("csharp.Data.Type", b =>
                 {
                     b.Property<Guid>("Id")
@@ -178,6 +146,50 @@ namespace csharp.Data.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -226,89 +238,6 @@ namespace csharp.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("csharp.Data.Token", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Audience");
-
-                    b.Property<DateTime>("Expires");
-
-                    b.Property<string>("Issuer");
-
-                    b.Property<Guid?>("NextTokenId");
-
-                    b.Property<DateTime>("NotBefore");
-
-                    b.Property<Guid?>("PreviousTokenId");
-
-                    b.Property<string>("RefreshToken");
-
-                    b.Property<string>("Subject");
-
-                    b.Property<string>("TokenType");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PreviousTokenId")
-                        .IsUnique()
-                        .HasFilter("[PreviousTokenId] IS NOT NULL");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TheUserTokens");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType");
-
-                    b.Property<string>("ClaimValue");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -381,18 +310,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("csharp.Data.Token", b =>
-                {
-                    b.HasOne("csharp.Data.Token", "PreviousToken")
-                        .WithOne("NextToken")
-                        .HasForeignKey("csharp.Data.Token", "PreviousTokenId");
-
-                    b.HasOne("csharp.Data.ApplicationUser", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("csharp.Data.Model", b =>
                 {
                     b.HasOne("csharp.Data.Manufacturer", "Manufacturer")
@@ -456,24 +373,6 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemOS", b =>
-                {
-                    b.HasOne("csharp.Data.Architecture", "Architecture")
-                        .WithMany("SystemOSs")
-                        .HasForeignKey("ArchitectureId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.OperatingSystem", "OperatingSystem")
-                        .WithMany("SystemOSs")
-                        .HasForeignKey("OSId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemOSs")
-                        .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -484,7 +383,7 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("csharp.Data.ApplicationUser")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -492,7 +391,7 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("csharp.Data.ApplicationUser")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -505,7 +404,7 @@ namespace csharp.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("csharp.Data.ApplicationUser")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -513,7 +412,7 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("csharp.Data.ApplicationUser")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
