@@ -5,4 +5,4 @@ dotnet: 2.1.504
 install:
  - dotnet restore "csharp/csharp.csproj"
 script:
- - dotnet build "csharp/csharp.csproj" -c Release -o /app
+ - dotnet build "csharp/csharp.csproj"
