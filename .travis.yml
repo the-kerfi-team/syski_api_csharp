@@ -1,0 +1,11 @@
+language: csharp
+solution: api.syski.co.uk.sln
+mono: none
+dotnet: 2.1.502
+os: 
+ - linux
+ - windows
+install:
+ - dotnet restore
+script:
+ - dotnet build
