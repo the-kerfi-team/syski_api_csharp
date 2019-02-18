@@ -1,0 +1,8 @@
+language: csharp
+solution: api.syski.co.uk.sln
+mono: none
+dotnet: 2.1.504
+install:
+ - dotnet restore "csharp/csharp.csproj"
+script:
+ - dotnet build "csharp/csharp.csproj" -c Release -o /app
