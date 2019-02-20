@@ -49,7 +49,7 @@ namespace csharp
                 // Use certificate passed in with docker for the key encryption
                 services.AddDataProtection()
                         .SetApplicationName("api.syski.co.uk")
-                        .ProtectKeysWithCertificate(new X509Certificate2("/https/ssl.pfx", "password"))
+                        .ProtectKeysWithCertificate(new X509Certificate2("/https/docker.api.syski.co.uk.pfx"))
                         .PersistKeysToFileSystem(new DirectoryInfo("etc/keys"));
             }             
 

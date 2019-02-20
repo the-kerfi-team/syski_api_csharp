@@ -50,6 +50,7 @@ namespace csharp.Controllers
                 Token token = _tokenManager.CreateToken(user, ref refreshToken);
                 return Ok(new UserTokenDTO()
                 {
+                    Id = token.User.Id,
                     Email = token.User.Email,
                     Token = GenerateJwtToken(token),
                     RefreshToken = refreshToken
@@ -82,6 +83,7 @@ namespace csharp.Controllers
                 Token token = _tokenManager.CreateToken(user, ref refreshToken);
                 return Ok(new UserTokenDTO()
                 {
+                    Id = token.User.Id,
                     Email = token.User.Email,
                     Token = GenerateJwtToken(token),
                     RefreshToken = refreshToken
