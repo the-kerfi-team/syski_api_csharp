@@ -25,6 +25,11 @@ namespace csharp.Data
         public DbSet<OperatingSystem> OperatingSystems { get; set; }
         public DbSet<SystemOS> SystemOSs { get; set; }
 
+        public DbSet<MemoryModel> MemoryModels { get; set; }
+        public DbSet<MemoryType> MemoryTypes { get; set; }
+        public DbSet<RAMModel> RAMModels { get; set; }
+        public DbSet<SystemRAM> SystemRAMs { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
 
@@ -124,6 +129,36 @@ namespace csharp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             SystemOS.HasKey(so => new { so.SystemId, so.OSId });
+
+
+            var MemoryModel = builder.Entity<MemoryModel>();
+
+            MemoryModel.HasOne(mm => mm.Model)
+                .WithOne(m => m.MemoryModel)
+                .HasForeignKey<MemoryModel>(mm => mm.Id);
+
+            MemoryModel.HasOne(mm => mm.MemoryType)
+                .WithMany(mt => mt.MemoryModels)
+                .HasForeignKey(mm => mm.MemoryTypeId);
+
+            builder.Entity<RAMModel>()
+                .HasOne(rm => rm.MemoryModel)
+                .WithOne(mm => mm.RAMModel)
+                .HasForeignKey<RAMModel>(rm => rm.Id);
+
+            var SystemRAM = builder.Entity<SystemRAM>();
+
+            SystemRAM.HasOne(sr => sr.System)
+                .WithMany(s => s.SystemRAMs)
+                .HasForeignKey(sr => sr.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemRAM.HasOne(sr => sr.RAMModel)
+                .WithMany(rm => rm.SystemRAMs)
+                .HasForeignKey(sr => sr.RAMModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId });
 
         }
   

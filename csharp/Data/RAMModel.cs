@@ -10,5 +10,7 @@ namespace csharp.Data
         public Guid Id { get; set; }
 
         public MemoryModel MemoryModel { get; set; }
+
+        public List<SystemRAM> SystemRAMs { get; set; }
     }
 }

@@ -21,5 +21,7 @@ namespace csharp.Data
         public List<SystemCPU> SystemCPUs { get; set; }
 
         public List<SystemOS> SystemOSs { get; set; }
+
+        public List<SystemRAM> SystemRAMs { get; set; }
     }
 }
