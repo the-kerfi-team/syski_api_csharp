@@ -14,14 +14,19 @@ namespace csharp.Data
 
         public DateTime LastUpdated { get; set; }
 
-        public Guid ModelId { get; set; }
+        public Guid? ModelId { get; set; }
 
-        public SystemModel SystemModel { get; set; }
+        public Model Model { get; set; }
 
-        public List<SystemCPU> SystemCPUs { get; set; }
+        public virtual List<SystemModelType> SystemTypes { get; set; }
 
-        public List<SystemOS> SystemOSs { get; set; }
+        public virtual List<SystemCPU> SystemCPUs { get; set; }
 
-        public List<SystemRAM> SystemRAMs { get; set; }
+        public virtual List<SystemOS> SystemOSs { get; set; }
+         
+        public virtual List<ApplicationUserSystems> Users { get; set; }
+
+        public virtual List<SystemRAM> SystemRAMs { get; set; }
+
     }
 }

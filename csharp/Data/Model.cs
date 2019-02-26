@@ -13,12 +13,12 @@ namespace csharp.Data
 
         public Guid ManufacturerId { get; set; }
 
-        public Manufacturer Manufacturer { get; set; }
+        public virtual Manufacturer Manufacturer { get; set; }
 
-        public SystemModel SystemModel { get; set; }
+        public virtual System System { get; set; }
 
-        public ProcessorModel ProcessorModel { get; set; }
+        public virtual ProcessorModel ProcessorModel { get; set; }
 
-        public MemoryModel MemoryModel { get; set; }
+        public virtual MemoryModel MemoryModel { get; set; }
     }
 }

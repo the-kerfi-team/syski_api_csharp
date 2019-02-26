@@ -11,10 +11,11 @@ namespace csharp.Data
     {
 
         public DbSet<Token> Tokens { get; set; }
+        public DbSet<ApplicationUserSystems> ApplicationUserSystems { get; set; }
+
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Type> Types { get; set; }
         public DbSet<Model> Models { get; set; }
-        public DbSet<SystemModel> SystemModels { get; set; }
         public DbSet<SystemModelType> SystemModelTypes { get; set; }
         public DbSet<System> Systems { get; set; }
 
@@ -52,21 +53,31 @@ namespace csharp.Data
                 .WithOne(t => t.NextToken)
                 .HasForeignKey<Token>(t => t.PreviousTokenId);
 
-            builder.Entity<Model>() 
-                 .HasOne(m => m.Manufacturer)
+            var ApplicationUserSystems = builder.Entity<ApplicationUserSystems>();
+
+            ApplicationUserSystems.HasOne(sc => sc.System)
+                .WithMany(s => s.Users)
+                .HasForeignKey(sc => sc.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            ApplicationUserSystems.HasOne(u => u.User)
+                .WithMany(u => u.Systems)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            ApplicationUserSystems.HasKey(sc => new { sc.UserId, sc.SystemId });
+
+            var Model = builder.Entity<Model>();
+
+            Model.HasOne(m => m.Manufacturer)
                  .WithMany(m => m.Models)
                  .HasForeignKey(m => m.ManufacturerId);
 
-            builder.Entity<SystemModel>()
-                .HasOne(sm => sm.Model)
-                .WithOne(m => m.SystemModel)
-                .HasForeignKey<SystemModel>(sm => sm.Id);
-
             var SystemModelType = builder.Entity<SystemModelType>();
 
-            SystemModelType.HasOne(smt => smt.SystemModel)
-                .WithMany(sm => sm.SystemModelTypes)
-                .HasForeignKey(smt => smt.SystemModelId)
+            SystemModelType.HasOne(smt => smt.System)
+                .WithMany(sm => sm.SystemTypes)
+                .HasForeignKey(smt => smt.SystemId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             SystemModelType.HasOne(smt => smt.Type)
@@ -74,15 +85,14 @@ namespace csharp.Data
                 .HasForeignKey(smt => smt.TypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            SystemModelType.HasKey(smt => new { smt.SystemModelId, smt.TypeId });
+            SystemModelType.HasKey(smt => new { smt.SystemId, smt.TypeId });
 
-            var System = builder.Entity<System>();
+            var system = builder.Entity<System>();
 
-            System.HasOne(s => s.SystemModel)
-                .WithMany(sm => sm.Systems)
-                .HasForeignKey(s => s.ModelId)
+            system.HasOne(s => s.Model)
+                .WithOne(m => m.System)
+                .HasForeignKey<System>(s => s.ModelId)
                 .OnDelete(DeleteBehavior.Restrict);
-
 
             var ProcessorModel = builder.Entity<ProcessorModel>();
 

@@ -13,7 +13,7 @@ namespace csharp.Data
 
         public Guid ArchitectureId { get; set; }
 
-        public Architecture Architecture { get; set; }
+        public virtual Architecture Architecture { get; set; }
 
         public int ClockSpeed { get; set; }
 
@@ -21,6 +21,6 @@ namespace csharp.Data
 
         public int ThreadCount { get; set; }
 
-        public List<SystemCPU> SystemCPUs { get; set; }
+        public virtual List<SystemCPU> SystemCPUs { get; set; }
     }
 }

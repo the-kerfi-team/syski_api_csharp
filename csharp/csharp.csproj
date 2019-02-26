@@ -14,6 +14,8 @@
     <Compile Remove="Data\Migrations\20190217161515_AddTokens.Designer.cs" />
     <Compile Remove="Data\Migrations\20190217172713_Test.cs" />
     <Compile Remove="Data\Migrations\20190217172713_Test.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190223143302_MakeLazyLoading.cs" />
+    <Compile Remove="Data\Migrations\20190223143302_MakeLazyLoading.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

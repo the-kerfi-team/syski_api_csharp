@@ -36,14 +36,14 @@ namespace csharp.Services.WebSockets
                 ActionTask currentTask = null;
                 try
                 {
-                    _TaskQueue.Take();
-                    if (currentTask.runAtDateTime > DateTime.Now)
+                    currentTask = _TaskQueue.Take();
+                    if (currentTask.runAtDateTime < DateTime.Now)
                     {
                         string sendAction = JsonConvert.SerializeObject(currentTask.action);
                         currentTask.webSocket.SendAsync(buffer: new ArraySegment<byte>(array: Encoding.ASCII.GetBytes(sendAction), offset: 0, count: sendAction.Length), messageType: WebSocketMessageType.Text, endOfMessage: true, cancellationToken: CancellationToken.None);
                         if (currentTask.repeat)
                         {
-                            currentTask.runAtDateTime = DateTime.Now.AddMilliseconds(currentTask.delay);
+                            currentTask.runAtDateTime = DateTime.Now.AddSeconds(currentTask.delay);
                             _TaskQueue.Add(currentTask);
                         }
                     }

@@ -40,7 +40,7 @@ namespace csharp.Services.WebSockets
                 authenticated = (_WebSocketManager.GetId(webSocket) != null);
             }
 
-            if (tries < 3)
+            if (tries > 3)
             {
                 await OnDisconnected(webSocket);
             }

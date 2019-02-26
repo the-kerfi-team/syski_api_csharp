@@ -20,17 +20,17 @@ namespace csharp
             CreateWebHostBuilder(args).Build().Run();
 
             // Recreate the database in the development environment
-            //var host = CreateWebHostBuilder(args).Build();
+         //   var host = CreateWebHostBuilder(args).Build();
 
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    var env = services.GetRequiredService<IHostingEnvironment>();
+          //  using (var scope = host.Services.CreateScope())
+          //  {
+           //     var services = scope.ServiceProvider;
+           //     var env = services.GetRequiredService<IHostingEnvironment>();
             //    if (env.IsDevelopment())
             //    {
             //        var context = services.GetRequiredService<ApplicationDbContext>();
-            //        context.Database.EnsureDeleted();
-            //       context.Database.Migrate();
+             //       context.Database.EnsureDeleted();
+             //      context.Database.Migrate();
             //    }
             //}
 
