@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace csharp.Services.WebSockets.Action
 {
@@ -44,7 +45,7 @@ namespace csharp.Services.WebSockets.Action
                         result = new Action()
                         {
                             action = "authentication",
-                            properties = new Dictionary<string, string>()
+                            properties = new JObject()
                         };
                         break;
                     }
@@ -53,7 +54,7 @@ namespace csharp.Services.WebSockets.Action
                         result = new Action()
                         {
                             action = "staticsystem",
-                            properties = new Dictionary<string, string>()
+                            properties = new JObject()
                         };
                         break;
                     }

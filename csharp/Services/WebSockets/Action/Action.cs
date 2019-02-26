@@ -11,7 +11,7 @@ namespace csharp.Services.WebSockets.Action
 
         public string action { get; set; }
 
-        public IDictionary<string, string> properties { get; set; }
+        public JObject properties { get; set; }
 
     }
 }
