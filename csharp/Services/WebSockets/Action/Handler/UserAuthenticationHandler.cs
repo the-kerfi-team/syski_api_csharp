@@ -22,7 +22,6 @@ namespace csharp.Services.WebSockets.Action.Handler
         {
             var userManager = _ServiceProvider.GetService<UserManager<ApplicationUser>>();
             bool validPassword = userManager.CheckPasswordAsync(userManager.Users.SingleOrDefault(r => r.Email == _Action.properties.Single(s => s.Key == "email").Value), _Action.properties.Single(s => s.Key == "password").Value).Result;
-            bool validPassword = true;
             if (validPassword)
             {
                 var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
