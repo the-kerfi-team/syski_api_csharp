@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 
 namespace csharp.Services.WebSockets.Action.Handler
 {
@@ -24,10 +25,11 @@ namespace csharp.Services.WebSockets.Action.Handler
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();
             if (system != null)
             {
-                string modelFromJSON = _Action.properties.FirstOrDefault(x => x.Key == "model").Value;
-                string manufacturerFromJSON = _Action.properties.FirstOrDefault(x => x.Key == "manufacturer").Value;
-                string typeFromJSON = _Action.properties.FirstOrDefault(x => x.Key == "type").Value;
-                string hostNameFromJSON = _Action.properties.FirstOrDefault(x => x.Key == "hostname").Value;
+                //List<JToken> jsonData = _Action.properties["properties"].Children().ToList();
+                string modelFromJSON = (string)_Action.properties.SelectToken("model");
+                string manufacturerFromJSON = (string)_Action.properties.SelectToken("manufacturer");
+                string typeFromJSON = (string)_Action.properties.SelectToken("type");
+                string hostNameFromJSON = (string)_Action.properties.SelectToken("hostname");
 
                 var manufacturer = context.Manufacturers.Where(m => m.Name == manufacturerFromJSON).FirstOrDefault();
                 if (manufacturer == null)

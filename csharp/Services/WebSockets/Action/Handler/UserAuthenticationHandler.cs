@@ -21,7 +21,7 @@ namespace csharp.Services.WebSockets.Action.Handler
         public override void HandleAction()
         {
             var userManager = _ServiceProvider.GetService<UserManager<ApplicationUser>>();
-            bool validPassword = userManager.CheckPasswordAsync(userManager.Users.SingleOrDefault(r => r.Email == _Action.properties.Single(s => s.Key == "email").Value), _Action.properties.Single(s => s.Key == "password").Value).Result;
+            bool validPassword = userManager.CheckPasswordAsync(userManager.Users.SingleOrDefault(r => r.Email == (string)_Action.properties.SelectToken("email")), (string)_Action.properties.SelectToken("password")).Result;
             if (validPassword)
             {
                 var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
