@@ -9,12 +9,12 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class StaticSystemHandler : ActionHandler
     {
 
-        public StaticSystemHandler(WebSocket webSocket, Guid? systemId, Action action) : base(webSocket, systemId, action)
+        public StaticSystemHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
 
         }
 
-        public override bool HandleAction()
+        public override void HandleAction()
         {
             throw new NotImplementedException();
         }

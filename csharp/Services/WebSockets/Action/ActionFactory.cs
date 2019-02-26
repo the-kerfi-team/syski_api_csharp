@@ -10,14 +10,14 @@ namespace csharp.Services.WebSockets.Action
     public class ActionFactory
     {
 
-        public static ActionHandler createActionHandler(WebSocket webSocket, Guid? systemId, Action action)
+        public static ActionHandler createActionHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action)
         {
             ActionHandler result = null;
             switch (action.action)
             {
                 case "user-authentication":
                     {
-                        result = new UserAuthenticationHandler(webSocket, systemId, action);
+                        result = new UserAuthenticationHandler(serviceProvider, webSocket, action);
                         break;
                     }
                 case "system-authentication":
@@ -27,7 +27,7 @@ namespace csharp.Services.WebSockets.Action
                     }
                 case "staticsystem":
                     {
-                        result = new StaticSystemHandler(webSocket, systemId, action);
+                        result = new StaticSystemHandler(serviceProvider, webSocket, action);
                         break;
                     }
             }

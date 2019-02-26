@@ -9,18 +9,18 @@ namespace csharp.Services.WebSockets.Action.Handler
     public abstract class ActionHandler
     {
 
+        protected readonly IServiceProvider _ServiceProvider;
         protected readonly WebSocket _WebSocket;
-        protected readonly Guid? _SystemId;
         protected readonly Action _Action;
 
-        public ActionHandler(WebSocket webSocket, Guid? systemId, Action action)
+        public ActionHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action)
         {
             _WebSocket = webSocket;
-            _SystemId = systemId;
+            _ServiceProvider = serviceProvider;
             _Action = action;
         }
 
-        public abstract bool HandleAction();
+        public abstract void HandleAction();
 
     }
 }

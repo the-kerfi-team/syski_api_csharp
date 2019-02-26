@@ -15,8 +15,8 @@ namespace csharp.Services.WebSockets
     {
 
         private Thread _thread;
-        private BlockingCollection<ActionTask> _TaskQueue = new BlockingCollection<ActionTask>();
         private ConcurrentDictionary<Guid, WebSocket> _WebSockets = new ConcurrentDictionary<Guid, WebSocket>();
+        private BlockingCollection<ActionTask> _TaskQueue = new BlockingCollection<ActionTask>();
 
         public WebSocketManager()
         {
