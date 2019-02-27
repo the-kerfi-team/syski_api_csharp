@@ -162,12 +162,7 @@ namespace csharp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId });
-
-
-            builder.Entity<StorageModel>()
-                .HasOne(sm => sm.MemoryModel)
-                .WithOne(mm => mm.StorageModel)
-                .HasForeignKey<StorageModel>(sm => sm.Id);
+            
 
             var SystemStorage = builder.Entity<SystemStorage>();
 
@@ -178,9 +173,15 @@ namespace csharp.Data
 
             SystemStorage.HasOne(ss => ss.StorageModel)
                 .WithMany(sm => sm.SystemStorages)
-                .HasForeignKey(ss => ss.StorageModelId);
+                .HasForeignKey(ss => ss.StorageModelId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             SystemStorage.HasKey(ss => new { ss.SystemId, ss.StorageModelId });
+
+            builder.Entity<StorageModel>()
+                .HasOne(sm => sm.MemoryModel)
+                .WithOne(mm => mm.StorageModel)
+                .HasForeignKey<StorageModel>(sm => sm.Id);
         }
   
     }

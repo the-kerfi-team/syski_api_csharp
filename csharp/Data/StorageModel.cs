@@ -7,7 +7,7 @@ namespace csharp.Data
 {
     public class StorageModel
     {
-        public Guid Id;
+        public Guid Id { get; set; }
 
         public MemoryModel MemoryModel { get; set; }
 
