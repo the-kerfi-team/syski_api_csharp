@@ -18,5 +18,7 @@ namespace csharp.Data
         public int MemoryBytes { get; set; }
 
         public RAMModel RAMModel { get; set; }
+
+        public StorageModel StorageModel { get; set; }
     }
 }

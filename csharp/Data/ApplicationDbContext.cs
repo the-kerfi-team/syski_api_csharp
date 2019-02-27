@@ -30,6 +30,9 @@ namespace csharp.Data
         public DbSet<RAMModel> RAMModels { get; set; }
         public DbSet<SystemRAM> SystemRAMs { get; set; }
 
+        public DbSet<StorageModel> StorageModels { get; set; }
+        public DbSet<SystemStorage> SystemStorages { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
 
@@ -160,6 +163,24 @@ namespace csharp.Data
 
             SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId });
 
+
+            builder.Entity<StorageModel>()
+                .HasOne(sm => sm.MemoryModel)
+                .WithOne(mm => mm.StorageModel)
+                .HasForeignKey<StorageModel>(sm => sm.Id);
+
+            var SystemStorage = builder.Entity<SystemStorage>();
+
+            SystemStorage.HasOne(ss => ss.System)
+                .WithMany(s => s.SystemStorages)
+                .HasForeignKey(ss => ss.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemStorage.HasOne(ss => ss.StorageModel)
+                .WithMany(sm => sm.SystemStorages)
+                .HasForeignKey(ss => ss.StorageModelId);
+
+            SystemStorage.HasKey(ss => new { ss.SystemId, ss.StorageModelId });
         }
   
     }
