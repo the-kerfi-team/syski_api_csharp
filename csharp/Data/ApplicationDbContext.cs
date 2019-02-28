@@ -36,6 +36,8 @@ namespace csharp.Data
         public DbSet<StorageModel> StorageModels { get; set; }
         public DbSet<SystemStorage> SystemStorages { get; set; }
 
+        public DbSet<MotherboardModel> MotherboardModels { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
 
@@ -211,6 +213,18 @@ namespace csharp.Data
                 .HasOne(sm => sm.MemoryModel)
                 .WithOne(mm => mm.StorageModel)
                 .HasForeignKey<StorageModel>(sm => sm.Id);
+
+
+            var MotherboardModel = builder.Entity<MotherboardModel>();
+
+            MotherboardModel.HasOne(mm => mm.Model)
+                .WithOne(m => m.MotherboardModel)
+                .HasForeignKey<MotherboardModel>(mm => mm.Id);
+
+            MotherboardModel.HasMany(mm => mm.Systems)
+                .WithOne(s => s.MotherboardModel)
+                .HasForeignKey(s => s.MotherboardId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
   
     }
