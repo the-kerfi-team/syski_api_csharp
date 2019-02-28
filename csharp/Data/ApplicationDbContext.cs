@@ -191,6 +191,8 @@ namespace csharp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             SystemGPU.HasKey(sg => new { sg.SystemId, sg.GPUModelId });
+
+
             var SystemStorage = builder.Entity<SystemStorage>();
 
             SystemStorage.HasOne(ss => ss.System)
