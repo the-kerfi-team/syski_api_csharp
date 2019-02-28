@@ -30,6 +30,9 @@ namespace csharp.Data
         public DbSet<RAMModel> RAMModels { get; set; }
         public DbSet<SystemRAM> SystemRAMs { get; set; }
 
+        public DbSet<GPUModel> GPUModels { get; set; }
+        public DbSet<SystemGPU> SystemGPUs { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
 
@@ -160,6 +163,30 @@ namespace csharp.Data
 
             SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId });
 
+
+            var GPUModel = builder.Entity<GPUModel>();
+
+            GPUModel.HasOne(gm => gm.RAMModel)
+                .WithOne(rm => rm.GPUModel)
+                .HasForeignKey<GPUModel>(gm => gm.Id);
+
+            GPUModel.HasOne(gm => gm.ProcessorModel)
+                .WithOne(pm => pm.GPUModel)
+                .HasForeignKey<GPUModel>(gm => gm.Id);
+
+            var SystemGPU = builder.Entity<SystemGPU>();
+
+            SystemGPU.HasOne(sg => sg.System)
+                .WithMany(s => s.SystemGPUs)
+                .HasForeignKey(sg => sg.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemGPU.HasOne(sg => sg.GPUModel)
+                .WithMany(gm => gm.SystemGPUs)
+                .HasForeignKey(sg => sg.GPUModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemGPU.HasKey(sg => new { sg.SystemId, sg.GPUModelId });
         }
   
     }

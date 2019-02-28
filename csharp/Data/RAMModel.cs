@@ -12,5 +12,7 @@ namespace csharp.Data
         public MemoryModel MemoryModel { get; set; }
 
         public List<SystemRAM> SystemRAMs { get; set; }
+
+        public GPUModel GPUModel { get; set; }
     }
 }

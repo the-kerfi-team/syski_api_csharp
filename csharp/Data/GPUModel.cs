@@ -11,7 +11,7 @@ namespace csharp.Data
 
         public ProcessorModel ProcessorModel { get; set; }
 
-        public MemoryModel MemoryModel { get; set; }
+        public RAMModel RAMModel { get; set; }
 
         public List<SystemGPU> SystemGPUs { get; set; }
     }

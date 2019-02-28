@@ -23,5 +23,7 @@ namespace csharp.Data
         public List<SystemOS> SystemOSs { get; set; }
 
         public List<SystemRAM> SystemRAMs { get; set; }
+
+        public List<SystemGPU> SystemGPUs { get; set; }
     }
 }
