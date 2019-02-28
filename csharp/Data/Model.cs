@@ -20,5 +20,7 @@ namespace csharp.Data
         public ProcessorModel ProcessorModel { get; set; }
 
         public MemoryModel MemoryModel { get; set; }
+
+        public MotherboardModel MotherboardModel { get; set; }
     }
 }

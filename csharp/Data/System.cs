@@ -27,5 +27,9 @@ namespace csharp.Data
         public List<SystemGPU> SystemGPUs { get; set; }
 
         public List<SystemStorage> SystemStorages { get; set; }
+
+        public Guid MotherboardId { get; set; }
+
+        public MotherboardModel MotherboardModel { get; set; }
     }
 }
