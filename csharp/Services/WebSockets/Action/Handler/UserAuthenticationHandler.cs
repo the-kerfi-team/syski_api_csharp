@@ -21,24 +21,39 @@ namespace csharp.Services.WebSockets.Action.Handler
         public override void HandleAction()
         {
             var userManager = _ServiceProvider.GetService<UserManager<ApplicationUser>>();
-            bool validPassword = userManager.CheckPasswordAsync(userManager.Users.SingleOrDefault(r => r.Email == (string)_Action.properties.SelectToken("email")), (string)_Action.properties.SelectToken("password")).Result;
-            if (validPassword)
+            ApplicationUser user = userManager.Users.SingleOrDefault(r => r.Email == (string)_Action.properties.SelectToken("email"));
+            if (user != null)
             {
-                var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
-                var context = _ServiceProvider.GetService<ApplicationDbContext>();
-                var system = new Data.System();
-                context.Add(system);
-                context.SaveChanges();
-                websocketManager.AddSocket(system.Id, _WebSocket);
-                websocketManager.addTask(new ActionTask()
+                bool validPassword = userManager.CheckPasswordAsync(user, (string)_Action.properties.SelectToken("password")).Result;
+                if (validPassword)
                 {
-                    action = ActionFactory.createAction("staticsystem"),
-                    delay = 86400,
-                    repeat = true,
-                    webSocket = _WebSocket,
-                    runAtDateTime = DateTime.Now
-                });
+                    var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
+                    var context = _ServiceProvider.GetService<ApplicationDbContext>();
+                    var system = new Data.System();
+                    system.LastUpdated = DateTime.Now;
+                    context.Add(system);
+                    context.SaveChanges();
+
+                    var applicationUserSystems = new Data.ApplicationUserSystems()
+                    {
+                        UserId = user.Id,
+                        SystemId = system.Id
+                    };
+                    context.Add(applicationUserSystems);
+                    context.SaveChanges();
+
+                    websocketManager.AddSocket(system.Id, _WebSocket);
+                    websocketManager.addTask(new ActionTask()
+                    {
+                        action = ActionFactory.createAction("staticsystem"),
+                        delay = 86400,
+                        repeat = true,
+                        webSocket = _WebSocket,
+                        runAtDateTime = DateTime.Now
+                    });
+                }
             }
+
         }
 
     }

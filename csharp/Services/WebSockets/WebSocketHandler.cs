@@ -26,23 +26,26 @@ namespace csharp.Services.WebSockets
 
         public virtual async Task OnConnected(WebSocket webSocket)
         {
+            int maxTries = 3;
             var buffer = new byte[1024 * 4];
             int tries = 0;
             bool authenticated = false;
 
             Action.Action action = null;
-            while (!(authenticated || tries > 3))
+            while (!(authenticated || tries >= maxTries))
             {
                 await SendMessageAsync(webSocket, JsonConvert.SerializeObject(ActionFactory.createAction("authentication")));
                 WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 action = JsonConvert.DeserializeObject<Action.Action>(Encoding.UTF8.GetString(buffer, 0, result.Count));
                 ActionFactory.createActionHandler(_ServiceProvider, webSocket, action).HandleAction();
-                authenticated = (_WebSocketManager.GetId(webSocket) != null);
+                authenticated = (_WebSocketManager.GetId(webSocket) != Guid.Empty);
+                tries++;
             }
 
-            if (tries > 3)
+            if (tries >= maxTries)
             {
-                await OnDisconnected(webSocket);
+                await webSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Failed Authentication", cancellationToken: CancellationToken.None);
+
             }
 
         }

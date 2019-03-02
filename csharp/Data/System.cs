@@ -10,6 +10,8 @@ namespace csharp.Data
     {
         public Guid Id { get; set; }
 
+        public string Secret { get; set; }
+
         public string HostName { get; set; }
 
         public DateTime LastUpdated { get; set; }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190302133946_AddServerSecret")]
+    partial class AddServerSecret
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,15 +97,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("Architectures");
                 });
 
-            modelBuilder.Entity("csharp.Data.GPUModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GPUModels");
-                });
-
             modelBuilder.Entity("csharp.Data.Manufacturer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -159,19 +152,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("csharp.Data.MotherboardModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("SerialNumber");
-
-                    b.Property<string>("Version");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MotherboardModels");
-                });
-
             modelBuilder.Entity("csharp.Data.OperatingSystem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -212,15 +192,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("RAMModels");
                 });
 
-            modelBuilder.Entity("csharp.Data.StorageModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StorageModels");
-                });
-
             modelBuilder.Entity("csharp.Data.System", b =>
                 {
                     b.Property<Guid>("Id")
@@ -234,15 +205,11 @@ namespace csharp.Data.Migrations
 
                     b.Property<string>("Secret");
 
-                    b.Property<Guid>("MotherboardId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ModelId")
                         .IsUnique()
                         .HasFilter("[ModelId] IS NOT NULL");
-
-                    b.HasIndex("MotherboardId");
 
                     b.ToTable("Systems");
                 });
@@ -258,28 +225,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("SystemId");
 
                     b.ToTable("SystemCPUs");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemGPU", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<Guid>("GPUModelId");
-
-                    b.HasKey("SystemId", "GPUModelId");
-
-                    b.HasIndex("GPUModelId");
-
-                    b.ToTable("SystemGPUs");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SystemModels");
                 });
 
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
@@ -325,19 +270,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("RAMModelId");
 
                     b.ToTable("SystemRAMs");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemStorage", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<Guid>("StorageModelId");
-
-                    b.HasKey("SystemId", "StorageModelId");
-
-                    b.HasIndex("StorageModelId");
-
-                    b.ToTable("SystemStorages");
                 });
 
             modelBuilder.Entity("csharp.Data.Token", b =>
@@ -518,19 +450,6 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("csharp.Data.GPUModel", b =>
-                {
-                    b.HasOne("csharp.Data.ProcessorModel", "ProcessorModel")
-                        .WithOne("GPUModel")
-                        .HasForeignKey("csharp.Data.GPUModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("csharp.Data.RAMModel", "RAMModel")
-                        .WithOne("GPUModel")
-                        .HasForeignKey("csharp.Data.GPUModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("csharp.Data.MemoryModel", b =>
                 {
                     b.HasOne("csharp.Data.Model", "Model")
@@ -549,14 +468,6 @@ namespace csharp.Data.Migrations
                     b.HasOne("csharp.Data.Manufacturer", "Manufacturer")
                         .WithMany("Models")
                         .HasForeignKey("ManufacturerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("csharp.Data.MotherboardModel", b =>
-                {
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("MotherboardModel")
-                        .HasForeignKey("csharp.Data.MotherboardModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -581,24 +492,11 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("csharp.Data.StorageModel", b =>
-                {
-                    b.HasOne("csharp.Data.MemoryModel", "MemoryModel")
-                        .WithOne("StorageModel")
-                        .HasForeignKey("csharp.Data.StorageModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("csharp.Data.System", b =>
                 {
                     b.HasOne("csharp.Data.Model", "Model")
                         .WithOne("System")
                         .HasForeignKey("csharp.Data.System", "ModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.MotherboardModel", "MotherboardModel")
-                        .WithMany("Systems")
-                        .HasForeignKey("MotherboardId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -613,27 +511,6 @@ namespace csharp.Data.Migrations
                         .WithMany("SystemCPUs")
                         .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemGPU", b =>
-                {
-                    b.HasOne("csharp.Data.GPUModel", "GPUModel")
-                        .WithMany("SystemGPUs")
-                        .HasForeignKey("GPUModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemGPUs")
-                        .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemModel", b =>
-                {
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("SystemModel")
-                        .HasForeignKey("csharp.Data.SystemModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
@@ -676,19 +553,6 @@ namespace csharp.Data.Migrations
 
                     b.HasOne("csharp.Data.System", "System")
                         .WithMany("SystemRAMs")
-                        .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemStorage", b =>
-                {
-                    b.HasOne("csharp.Data.StorageModel", "StorageModel")
-                        .WithMany("SystemStorages")
-                        .HasForeignKey("StorageModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemStorages")
                         .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
