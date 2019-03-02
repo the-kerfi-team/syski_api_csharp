@@ -31,6 +31,14 @@ namespace csharp.Data
         public DbSet<RAMModel> RAMModels { get; set; }
         public DbSet<SystemRAM> SystemRAMs { get; set; }
 
+        public DbSet<GPUModel> GPUModels { get; set; }
+        public DbSet<SystemGPU> SystemGPUs { get; set; }
+
+        public DbSet<StorageModel> StorageModels { get; set; }
+        public DbSet<SystemStorage> SystemStorages { get; set; }
+
+        public DbSet<MotherboardModel> MotherboardModels { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
 
@@ -169,7 +177,64 @@ namespace csharp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId });
+            
 
+
+            var GPUModel = builder.Entity<GPUModel>();
+
+            GPUModel.HasOne(gm => gm.RAMModel)
+                .WithOne(rm => rm.GPUModel)
+                .HasForeignKey<GPUModel>(gm => gm.Id);
+
+            GPUModel.HasOne(gm => gm.ProcessorModel)
+                .WithOne(pm => pm.GPUModel)
+                .HasForeignKey<GPUModel>(gm => gm.Id);
+
+            var SystemGPU = builder.Entity<SystemGPU>();
+
+            SystemGPU.HasOne(sg => sg.System)
+                .WithMany(s => s.SystemGPUs)
+                .HasForeignKey(sg => sg.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemGPU.HasOne(sg => sg.GPUModel)
+                .WithMany(gm => gm.SystemGPUs)
+                .HasForeignKey(sg => sg.GPUModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemGPU.HasKey(sg => new { sg.SystemId, sg.GPUModelId });
+
+
+            var SystemStorage = builder.Entity<SystemStorage>();
+
+            SystemStorage.HasOne(ss => ss.System)
+                .WithMany(s => s.SystemStorages)
+                .HasForeignKey(ss => ss.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemStorage.HasOne(ss => ss.StorageModel)
+                .WithMany(sm => sm.SystemStorages)
+                .HasForeignKey(ss => ss.StorageModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemStorage.HasKey(ss => new { ss.SystemId, ss.StorageModelId });
+
+            builder.Entity<StorageModel>()
+                .HasOne(sm => sm.MemoryModel)
+                .WithOne(mm => mm.StorageModel)
+                .HasForeignKey<StorageModel>(sm => sm.Id);
+
+
+            var MotherboardModel = builder.Entity<MotherboardModel>();
+
+            MotherboardModel.HasOne(mm => mm.Model)
+                .WithOne(m => m.MotherboardModel)
+                .HasForeignKey<MotherboardModel>(mm => mm.Id);
+
+            MotherboardModel.HasMany(mm => mm.Systems)
+                .WithOne(s => s.MotherboardModel)
+                .HasForeignKey(s => s.MotherboardId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
   
     }

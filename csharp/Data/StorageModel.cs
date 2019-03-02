@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 
 namespace csharp.Data
 {
-    public class RAMModel
+    public class StorageModel
     {
         public Guid Id { get; set; }
 
         public MemoryModel MemoryModel { get; set; }
 
-        public List<SystemRAM> SystemRAMs { get; set; }
-
-        public GPUModel GPUModel { get; set; }
+        public List<SystemStorage> SystemStorages { get; set; }
     }
 }

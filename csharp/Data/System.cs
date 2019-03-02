@@ -28,5 +28,14 @@ namespace csharp.Data
 
         public virtual List<SystemRAM> SystemRAMs { get; set; }
 
+        public List<SystemRAM> SystemRAMs { get; set; }
+
+        public List<SystemGPU> SystemGPUs { get; set; }
+
+        public List<SystemStorage> SystemStorages { get; set; }
+
+        public Guid MotherboardId { get; set; }
+
+        public MotherboardModel MotherboardModel { get; set; }
     }
 }

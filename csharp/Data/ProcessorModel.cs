@@ -21,6 +21,8 @@ namespace csharp.Data
 
         public int ThreadCount { get; set; }
 
-        public virtual List<SystemCPU> SystemCPUs { get; set; }
+        public List<SystemCPU> SystemCPUs { get; set; }
+
+        public GPUModel GPUModel { get; set; }
     }
 }

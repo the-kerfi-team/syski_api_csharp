@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190228140126_CreateGPUs")]
+    partial class CreateGPUs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,19 +70,6 @@ namespace csharp.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("csharp.Data.ApplicationUserSystems", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<Guid>("SystemId");
-
-                    b.HasKey("UserId", "SystemId");
-
-                    b.HasIndex("SystemId");
-
-                    b.ToTable("ApplicationUserSystems");
                 });
 
             modelBuilder.Entity("csharp.Data.Architecture", b =>
@@ -159,19 +148,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("csharp.Data.MotherboardModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("SerialNumber");
-
-                    b.Property<string>("Version");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MotherboardModels");
-                });
-
             modelBuilder.Entity("csharp.Data.OperatingSystem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -230,17 +206,11 @@ namespace csharp.Data.Migrations
 
                     b.Property<DateTime>("LastUpdated");
 
-                    b.Property<Guid?>("ModelId");
-
-                    b.Property<Guid>("MotherboardId");
+                    b.Property<Guid>("ModelId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModelId")
-                        .IsUnique()
-                        .HasFilter("[ModelId] IS NOT NULL");
-
-                    b.HasIndex("MotherboardId");
+                    b.HasIndex("ModelId");
 
                     b.ToTable("Systems");
                 });
@@ -282,11 +252,11 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
                 {
-                    b.Property<Guid>("SystemId");
+                    b.Property<Guid>("SystemModelId");
 
                     b.Property<Guid>("TypeId");
 
-                    b.HasKey("SystemId", "TypeId");
+                    b.HasKey("SystemModelId", "TypeId");
 
                     b.HasIndex("TypeId");
 
@@ -503,19 +473,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("csharp.Data.ApplicationUserSystems", b =>
-                {
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("Users")
-                        .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.ApplicationUser", "User")
-                        .WithMany("Systems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("csharp.Data.GPUModel", b =>
                 {
                     b.HasOne("csharp.Data.ProcessorModel", "ProcessorModel")
@@ -550,14 +507,6 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("csharp.Data.MotherboardModel", b =>
-                {
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("MotherboardModel")
-                        .HasForeignKey("csharp.Data.MotherboardModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("csharp.Data.ProcessorModel", b =>
                 {
                     b.HasOne("csharp.Data.Architecture", "Architecture")
@@ -589,14 +538,9 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("csharp.Data.System", b =>
                 {
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("System")
-                        .HasForeignKey("csharp.Data.System", "ModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("csharp.Data.MotherboardModel", "MotherboardModel")
+                    b.HasOne("csharp.Data.SystemModel", "SystemModel")
                         .WithMany("Systems")
-                        .HasForeignKey("MotherboardId")
+                        .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -636,9 +580,9 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
                 {
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemTypes")
-                        .HasForeignKey("SystemId")
+                    b.HasOne("csharp.Data.SystemModel", "SystemModel")
+                        .WithMany("SystemModelTypes")
+                        .HasForeignKey("SystemModelId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("csharp.Data.Type", "Type")
