@@ -232,9 +232,9 @@ namespace csharp.Data.Migrations
 
                     b.Property<Guid?>("ModelId");
 
-                    b.Property<string>("Secret");
-
                     b.Property<Guid>("MotherboardId");
+
+                    b.Property<string>("Secret");
 
                     b.HasKey("Id");
 
@@ -271,15 +271,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("GPUModelId");
 
                     b.ToTable("SystemGPUs");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SystemModels");
                 });
 
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
@@ -626,14 +617,6 @@ namespace csharp.Data.Migrations
                         .WithMany("SystemGPUs")
                         .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemModel", b =>
-                {
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("SystemModel")
-                        .HasForeignKey("csharp.Data.SystemModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
