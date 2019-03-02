@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace csharp.Data.Migrations
 {
-    public partial class DefaultMigration : Migration
+    public partial class BigMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -234,7 +234,7 @@ namespace csharp.Data.Migrations
                     HostName = table.Column<string>(nullable: true),
                     LastUpdated = table.Column<DateTime>(nullable: false),
                     ModelId = table.Column<Guid>(nullable: true),
-                    MotherboardId = table.Column<Guid>(nullable: false)
+                    MotherboardId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {

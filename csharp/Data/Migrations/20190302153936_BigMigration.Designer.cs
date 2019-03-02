@@ -10,8 +10,8 @@ using csharp.Data;
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190302135307_DefaultMigration")]
-    partial class DefaultMigration
+    [Migration("20190302153936_BigMigration")]
+    partial class BigMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -234,7 +234,7 @@ namespace csharp.Data.Migrations
 
                     b.Property<Guid?>("ModelId");
 
-                    b.Property<Guid>("MotherboardId");
+                    b.Property<Guid?>("MotherboardId");
 
                     b.Property<string>("Secret");
 

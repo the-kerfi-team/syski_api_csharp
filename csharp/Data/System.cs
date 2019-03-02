@@ -34,7 +34,7 @@ namespace csharp.Data
 
         public virtual List<SystemStorage> SystemStorages { get; set; }
 
-        public Guid MotherboardId { get; set; }
+        public Guid? MotherboardId { get; set; }
 
         public virtual MotherboardModel MotherboardModel { get; set; }
     }

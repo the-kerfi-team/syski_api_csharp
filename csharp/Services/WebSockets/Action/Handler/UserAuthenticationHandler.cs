@@ -7,6 +7,8 @@ using System.Net.WebSockets;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using csharp.Services.WebSockets.Action.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace csharp.Services.WebSockets.Action.Handler
 {
@@ -31,6 +33,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                     var context = _ServiceProvider.GetService<ApplicationDbContext>();
                     var system = new Data.System();
                     system.LastUpdated = DateTime.Now;
+                    system.Secret = Guid.NewGuid().ToString().Replace("-", "");
                     context.Add(system);
                     context.SaveChanges();
 
@@ -41,6 +44,12 @@ namespace csharp.Services.WebSockets.Action.Handler
                     };
                     context.Add(applicationUserSystems);
                     context.SaveChanges();
+
+                    var authJson = new JObject();
+                    authJson.Add("system", system.Id);
+                    authJson.Add("secret", system.Secret);
+
+                    SendMessageAsync(JsonConvert.SerializeObject(ActionFactory.createAction("authentication", authJson)));
 
                     websocketManager.AddSocket(system.Id, _WebSocket);
                     websocketManager.addTask(new ActionTask()

@@ -232,7 +232,7 @@ namespace csharp.Data.Migrations
 
                     b.Property<Guid?>("ModelId");
 
-                    b.Property<Guid>("MotherboardId");
+                    b.Property<Guid?>("MotherboardId");
 
                     b.Property<string>("Secret");
 

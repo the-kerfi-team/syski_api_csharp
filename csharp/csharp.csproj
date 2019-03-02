@@ -36,6 +36,8 @@
     <Compile Remove="Data\Migrations\20190228140126_CreateGPUs.Designer.cs" />
     <Compile Remove="Data\Migrations\20190228142931_CreateMotherboards.cs" />
     <Compile Remove="Data\Migrations\20190228142931_CreateMotherboards.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190302135307_DefaultMigration.cs" />
+    <Compile Remove="Data\Migrations\20190302135307_DefaultMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

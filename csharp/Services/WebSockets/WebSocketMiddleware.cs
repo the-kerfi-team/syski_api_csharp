@@ -30,7 +30,14 @@ namespace csharp.Services.WebSockets
                 {
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        await _WebSocketHandler.ReceiveAsync(webSocket, result, buffer);
+                        //try
+                        //{
+                            await _WebSocketHandler.ReceiveAsync(webSocket, result, buffer);
+                        //}
+                        //catch (Exception e)
+                        //{
+                        //    await _WebSocketHandler.OnDisconnected(webSocket);
+                        //}
                     }
                     else if (result.MessageType == WebSocketMessageType.Close)
                     {

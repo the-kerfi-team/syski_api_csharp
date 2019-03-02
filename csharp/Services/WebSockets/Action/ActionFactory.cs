@@ -23,7 +23,7 @@ namespace csharp.Services.WebSockets.Action
                     }
                 case "system-authentication":
                     {
-
+                        result = new SystemAuthenticationHandler(serviceProvider, webSocket, action);
                         break;
                     }
                 case "staticsystem":
@@ -37,7 +37,16 @@ namespace csharp.Services.WebSockets.Action
 
         public static Action createAction(string actionName)
         {
+            return createAction(actionName, new JObject());
+        }
+
+        public static Action createAction(string actionName, JObject actionProperties)
+        {
             Action result = null;
+            if (actionProperties == null)
+            {
+                actionProperties = new JObject();
+            }
             switch (actionName)
             {
                 case "authentication":
@@ -45,7 +54,7 @@ namespace csharp.Services.WebSockets.Action
                         result = new Action()
                         {
                             action = "authentication",
-                            properties = new JObject()
+                            properties = actionProperties
                         };
                         break;
                     }
@@ -54,7 +63,7 @@ namespace csharp.Services.WebSockets.Action
                         result = new Action()
                         {
                             action = "staticsystem",
-                            properties = new JObject()
+                            properties = actionProperties
                         };
                         break;
                     }

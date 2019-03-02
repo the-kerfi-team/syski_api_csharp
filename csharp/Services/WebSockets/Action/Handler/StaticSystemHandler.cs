@@ -76,15 +76,11 @@ namespace csharp.Services.WebSockets.Action.Handler
                     context.Add(systemModelTypes);
                     context.SaveChanges();
                 }
-                system.Model = model;
+                system.ModelId = model.Id;
                 system.HostName = hostNameFromJSON;
 
                 context.Update(system);
                 context.SaveChanges();
-            }
-            else
-            {
-                throw new NullReferenceException();
             }
         }
     }
