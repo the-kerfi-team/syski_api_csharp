@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using csharp.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,10 +21,14 @@ namespace csharp.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet("{systemId}")]
         public async Task<IActionResult> GetStorages(Guid systemId)
         {
-            if (_context.Systems.Find(systemId) == null)
+            var applicationUserSystem = _context.ApplicationUserSystems
+                .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();
+
+            if (applicationUserSystem == null)
                 return NotFound();
 
             var Storages = _context.SystemStorages.Where(sc => sc.SystemId == systemId).ToList();

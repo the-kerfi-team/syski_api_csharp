@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using csharp.Data;
 using csharp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,10 +22,14 @@ namespace csharp.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet("{SystemId}")]
         public async Task<IActionResult> GetOSs(Guid SystemId)
         {
-            if (_context.Systems.Find(SystemId) == null)
+            var applicationUserSystem = _context.ApplicationUserSystems
+                .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();
+
+            if (applicationUserSystem == null)
                 return NotFound();
 
             var SystemOSs = _context.SystemOSs.Where(so => so.SystemId == SystemId).ToList();

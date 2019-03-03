@@ -26,7 +26,6 @@ namespace csharp.Controllers
         [HttpGet]
         public IActionResult GetSystemsIndex()
         {
-
             var applicationUserSystems = _context.ApplicationUserSystems.Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value).ToList();
             List<SystemDTO> systemDTOs = new List<SystemDTO>();
             foreach (var item in applicationUserSystems)
@@ -34,7 +33,6 @@ namespace csharp.Controllers
                 systemDTOs.Add(CreateDTO(_context.Systems.First(s => s.Id == item.SystemId)));
             }
             return Ok(systemDTOs);
-
         }
 
         [HttpGet("{Id}")]
