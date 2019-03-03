@@ -38,6 +38,8 @@
     <Compile Remove="Data\Migrations\20190228142931_CreateMotherboards.Designer.cs" />
     <Compile Remove="Data\Migrations\20190302135307_DefaultMigration.cs" />
     <Compile Remove="Data\Migrations\20190302135307_DefaultMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190302153936_BigMigration.cs" />
+    <Compile Remove="Data\Migrations\20190302153936_BigMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,8 +10,8 @@ using csharp.Data;
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190302153936_BigMigration")]
-    partial class BigMigration
+    [Migration("20190303113840_AllModelsMigration")]
+    partial class AllModelsMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace csharp.Data.Migrations
 {
-    public partial class BigMigration : Migration
+    public partial class AllModelsMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

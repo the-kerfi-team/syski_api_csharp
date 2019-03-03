@@ -44,8 +44,14 @@ namespace csharp.Services.WebSockets
 
             if (tries >= maxTries)
             {
-                await webSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Failed Authentication", cancellationToken: CancellationToken.None);
+                try
+                {
+                    await webSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Failed Authentication", cancellationToken: CancellationToken.None);
+                }
+                catch (WebSocketException e)
+                {
 
+                }
             }
 
         }

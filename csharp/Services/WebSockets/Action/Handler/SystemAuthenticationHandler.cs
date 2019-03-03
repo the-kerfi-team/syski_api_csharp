@@ -24,15 +24,12 @@ namespace csharp.Services.WebSockets.Action.Handler
             if (system != null)
             {
                 var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
-                websocketManager.AddSocket(system.Id, _WebSocket);
-                websocketManager.addTask(new ActionTask()
+                var previousSocket = websocketManager.GetSocketById(system.Id);
+                if (previousSocket != null)
                 {
-                    action = ActionFactory.createAction("staticsystem"),
-                    delay = 86400,
-                    repeat = true,
-                    webSocket = _WebSocket,
-                    runAtDateTime = DateTime.Now
-                });
+                    websocketManager.RemoveSocket(system.Id);
+                }
+                websocketManager.AddSocket(system.Id, _WebSocket);
             }
         }
     }

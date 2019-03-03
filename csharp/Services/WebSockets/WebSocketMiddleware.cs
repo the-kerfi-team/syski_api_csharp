@@ -30,14 +30,14 @@ namespace csharp.Services.WebSockets
                 {
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        //try
-                        //{
+                        try
+                        {
                             await _WebSocketHandler.ReceiveAsync(webSocket, result, buffer);
-                        //}
-                        //catch (Exception e)
-                        //{
-                        //    await _WebSocketHandler.OnDisconnected(webSocket);
-                        //}
+                        }
+                        catch (WebSocketException ex)
+                        {
+                            await _WebSocketHandler.OnDisconnected(webSocket);
+                        }
                     }
                     else if (result.MessageType == WebSocketMessageType.Close)
                     {
@@ -56,8 +56,15 @@ namespace csharp.Services.WebSockets
             var buffer = new byte[1024 * 4];
             while (webSocket.State == WebSocketState.Open)
             {
-                var result = await webSocket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
-                handleMessage(result, buffer);
+                try
+                {
+                    var result = await webSocket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
+                    handleMessage(result, buffer);
+                }
+                catch (WebSocketException ex)
+                {
+                    await _WebSocketHandler.OnDisconnected(webSocket);
+                }
             }
         }
     }

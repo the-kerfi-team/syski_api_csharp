@@ -52,14 +52,6 @@ namespace csharp.Services.WebSockets.Action.Handler
                     SendMessageAsync(JsonConvert.SerializeObject(ActionFactory.createAction("authentication", authJson)));
 
                     websocketManager.AddSocket(system.Id, _WebSocket);
-                    websocketManager.addTask(new ActionTask()
-                    {
-                        action = ActionFactory.createAction("staticsystem"),
-                        delay = 86400,
-                        repeat = true,
-                        webSocket = _WebSocket,
-                        runAtDateTime = DateTime.Now
-                    });
                 }
             }
 
