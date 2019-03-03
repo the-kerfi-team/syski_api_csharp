@@ -7,12 +7,12 @@ namespace csharp.Data
 {
     public class SystemModelType
     {
-        public Guid SystemModelId { get; set; }
+        public Guid SystemId { get; set; }
 
-        public SystemModel SystemModel { get; set; }
+        public virtual System System { get; set; }
         
         public Guid TypeId { get; set; }
 
-        public Type Type { get; set; }
+        public virtual Type Type { get; set; }
     }
 }

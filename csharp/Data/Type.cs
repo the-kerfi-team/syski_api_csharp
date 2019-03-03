@@ -11,6 +11,6 @@ namespace csharp.Data
 
         public string Name { get; set; }
 
-        public List<SystemModelType> SystemModelTypes { get; set; }
+        public virtual List<SystemModelType> SystemModelTypes { get; set; }
     }
 }

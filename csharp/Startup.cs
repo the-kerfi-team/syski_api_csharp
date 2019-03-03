@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography.X509Certificates;
 using csharp.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.WebSockets;
+using System.Threading;
+using csharp.Services.WebSockets;
 
 namespace csharp
 {
@@ -49,7 +52,7 @@ namespace csharp
                 // Use certificate passed in with docker for the key encryption
                 services.AddDataProtection()
                         .SetApplicationName("api.syski.co.uk")
-                        .ProtectKeysWithCertificate(new X509Certificate2("/https/docker.api.syski.co.uk.pfx"))
+                        .ProtectKeysWithCertificate(new X509Certificate2("/https/docker.api.syski.co.uk.pfx", "crypticpassword"))
                         .PersistKeysToFileSystem(new DirectoryInfo("etc/keys"));
             }             
 
@@ -113,11 +116,14 @@ namespace csharp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<UserTokenManager>();
+            services.AddSingleton<Services.WebSockets.WebSocketManager>();
+            services.AddSingleton<WebSocketHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ApplicationDbContext dbContext)
+        public void Configure(IApplicationBuilder app, ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -146,6 +152,15 @@ namespace csharp
 
             app.UseAuthentication();
 
+            var wsOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 4 * 1024
+            };
+            app.UseWebSockets(wsOptions);
+
+            app.Map("/websocket", (_app) => _app.UseMiddleware<WebSocketMiddleware>(serviceProvider.GetService<WebSocketHandler>()));
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -156,5 +171,6 @@ namespace csharp
             // Ensure the database has been created
             dbContext.Database.EnsureCreated();
         }
+        
     }
 }

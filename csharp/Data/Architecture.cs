@@ -11,8 +11,8 @@ namespace csharp.Data
 
         public string Name { get; set; }
 
-        public List<ProcessorModel> ProcessorModels { get; set; }
+        public virtual List<ProcessorModel> ProcessorModels { get; set; }
 
-        public List<SystemOS> SystemOSs { get; set; }
+        public virtual List<SystemOS> SystemOSs { get; set; }
     }
 }

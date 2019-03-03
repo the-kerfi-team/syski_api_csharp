@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using csharp.Data;
 using csharp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,19 +22,19 @@ namespace csharp.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetSystemsIndex()
+        public IActionResult GetSystemsIndex()
         {
-            var systems = _context.Systems.ToList();
 
+            var applicationUserSystems = _context.ApplicationUserSystems.Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value).ToList();
             List<SystemDTO> systemDTOs = new List<SystemDTO>();
-
-            foreach (var item in systems)
+            foreach (var item in applicationUserSystems)
             {
-                systemDTOs.Add(CreateDTO(item));
+                systemDTOs.Add(CreateDTO(_context.Systems.First(s => s.Id == item.SystemId)));
             }
-
             return Ok(systemDTOs);
+
         }
 
         [HttpGet("{Id}")]
@@ -46,30 +48,30 @@ namespace csharp.Controllers
 
         private SystemDTO CreateDTO(csharp.Data.System item)
         {
-            var systemModel = _context.SystemModels.Find(item.ModelId);           
-            var model = _context.Models.Find(systemModel.Id);
-            var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);
-
-            var systemModelTypes =  _context.SystemModelTypes
-                                            .Where(smt => smt.SystemModelId == systemModel.Id)
-                                            .ToList();
-
-            var types = new List<Data.Type>();
-            foreach(var systemModelType in systemModelTypes)
-            {
-                types.Add(_context.Types.Find(systemModelType.TypeId));
-            }
-
             var systemDTO = new SystemDTO()
             {
                 Id = item.Id,
-                ModelName = model.Name,
-                ManufacturerName = manufacturer.Name,
-                Types = types,
                 HostName = item.HostName,
                 LastUpdated = item.LastUpdated
             };
+            if (item.ModelId != null)
+            {
+                var model = _context.Models.Find(item.ModelId);
+                var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);
 
+                var systemModelTypes = _context.SystemModelTypes
+                                                .Where(smt => smt.SystemId == item.ModelId)
+                                                .ToList();
+                var types = new List<Data.Type>();
+                foreach (var systemModelType in systemModelTypes)
+                {
+                    types.Add(_context.Types.Find(systemModelType.TypeId));
+                }
+
+                systemDTO.ModelName = model.Name;
+                systemDTO.ManufacturerName = manufacturer.Name;
+                systemDTO.Types = types;
+            }
             return systemDTO;
         }
 

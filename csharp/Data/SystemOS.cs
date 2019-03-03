@@ -9,15 +9,15 @@ namespace csharp.Data
     {
         public Guid SystemId { get; set; }
 
-        public System System { get; set; }
+        public virtual System System { get; set; }
 
         public Guid OSId { get; set; }
 
-        public OperatingSystem OperatingSystem { get; set; }
+        public virtual OperatingSystem OperatingSystem { get; set; }
 
         public Guid ArchitectureId { get; set; }
 
-        public Architecture Architecture { get; set; }
+        public virtual Architecture Architecture { get; set; }
 
         public string Version { get; set; }
     }

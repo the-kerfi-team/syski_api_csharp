@@ -9,8 +9,8 @@ namespace csharp.Data
     {
         public Guid Id { get; set; }
 
-        public MemoryModel MemoryModel { get; set; }
+        public virtual MemoryModel MemoryModel { get; set; }
 
-        public List<SystemStorage> SystemStorages { get; set; }
+        public virtual List<SystemStorage> SystemStorages { get; set; }
     }
 }
