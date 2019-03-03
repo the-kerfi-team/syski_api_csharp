@@ -98,8 +98,8 @@ namespace csharp.Data
             var system = builder.Entity<System>();
 
             system.HasOne(s => s.Model)
-                .WithOne(m => m.System)
-                .HasForeignKey<System>(s => s.ModelId)
+                .WithMany(m => m.Systems)
+                .HasForeignKey(s => s.ModelId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             var ProcessorModel = builder.Entity<ProcessorModel>();

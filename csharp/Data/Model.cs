@@ -15,7 +15,7 @@ namespace csharp.Data
 
         public virtual Manufacturer Manufacturer { get; set; }
 
-        public virtual System System { get; set; }
+        public virtual List<System> Systems { get; set; }
 
         public virtual ProcessorModel ProcessorModel { get; set; }
 
