@@ -9,16 +9,16 @@ namespace csharp.Data
     {
         public Guid Id { get; set; }
 
-        public Model Model { get; set; }
+        public virtual Model Model { get; set; }
 
         public Guid MemoryTypeId { get; set; }
 
-        public MemoryType MemoryType { get; set; }
+        public virtual MemoryType MemoryType { get; set; }
 
         public int MemoryBytes { get; set; }
 
-        public RAMModel RAMModel { get; set; }
+        public virtual RAMModel RAMModel { get; set; }
 
-        public StorageModel StorageModel { get; set; }
+        public virtual StorageModel StorageModel { get; set; }
     }
 }

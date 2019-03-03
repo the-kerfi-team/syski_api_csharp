@@ -9,7 +9,9 @@ namespace csharp.Data
     public class ApplicationUser : IdentityUser
     {
 
-        public ICollection<Token> Tokens { get; set; }
+        public virtual ICollection<Token> Tokens { get; set; }
+
+        public virtual ICollection<ApplicationUserSystems> Systems { get; set; }
 
     }
 }

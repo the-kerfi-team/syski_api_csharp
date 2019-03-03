@@ -70,6 +70,19 @@ namespace csharp.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("csharp.Data.ApplicationUserSystems", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<Guid>("SystemId");
+
+                    b.HasKey("UserId", "SystemId");
+
+                    b.HasIndex("SystemId");
+
+                    b.ToTable("ApplicationUserSystems");
+                });
+
             modelBuilder.Entity("csharp.Data.Architecture", b =>
                 {
                     b.Property<Guid>("Id")
@@ -217,13 +230,17 @@ namespace csharp.Data.Migrations
 
                     b.Property<DateTime>("LastUpdated");
 
-                    b.Property<Guid>("ModelId");
+                    b.Property<Guid?>("ModelId");
 
-                    b.Property<Guid>("MotherboardId");
+                    b.Property<Guid?>("MotherboardId");
+
+                    b.Property<string>("Secret");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModelId");
+                    b.HasIndex("ModelId")
+                        .IsUnique()
+                        .HasFilter("[ModelId] IS NOT NULL");
 
                     b.HasIndex("MotherboardId");
 
@@ -256,22 +273,13 @@ namespace csharp.Data.Migrations
                     b.ToTable("SystemGPUs");
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemModel", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SystemModels");
-                });
-
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
                 {
-                    b.Property<Guid>("SystemModelId");
+                    b.Property<Guid>("SystemId");
 
                     b.Property<Guid>("TypeId");
 
-                    b.HasKey("SystemModelId", "TypeId");
+                    b.HasKey("SystemId", "TypeId");
 
                     b.HasIndex("TypeId");
 
@@ -488,6 +496,19 @@ namespace csharp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("csharp.Data.ApplicationUserSystems", b =>
+                {
+                    b.HasOne("csharp.Data.System", "System")
+                        .WithMany("Users")
+                        .HasForeignKey("SystemId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("csharp.Data.ApplicationUser", "User")
+                        .WithMany("Systems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("csharp.Data.GPUModel", b =>
                 {
                     b.HasOne("csharp.Data.ProcessorModel", "ProcessorModel")
@@ -561,9 +582,9 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("csharp.Data.System", b =>
                 {
-                    b.HasOne("csharp.Data.SystemModel", "SystemModel")
-                        .WithMany("Systems")
-                        .HasForeignKey("ModelId")
+                    b.HasOne("csharp.Data.Model", "Model")
+                        .WithOne("System")
+                        .HasForeignKey("csharp.Data.System", "ModelId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("csharp.Data.MotherboardModel", "MotherboardModel")
@@ -598,19 +619,11 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemModel", b =>
-                {
-                    b.HasOne("csharp.Data.Model", "Model")
-                        .WithOne("SystemModel")
-                        .HasForeignKey("csharp.Data.SystemModel", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("csharp.Data.SystemModelType", b =>
                 {
-                    b.HasOne("csharp.Data.SystemModel", "SystemModel")
-                        .WithMany("SystemModelTypes")
-                        .HasForeignKey("SystemModelId")
+                    b.HasOne("csharp.Data.System", "System")
+                        .WithMany("SystemTypes")
+                        .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("csharp.Data.Type", "Type")

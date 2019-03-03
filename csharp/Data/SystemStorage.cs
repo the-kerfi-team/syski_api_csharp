@@ -9,10 +9,10 @@ namespace csharp.Data
     {
         public Guid SystemId { get; set; }
 
-        public System System { get; set; }
+        public virtual System System { get; set; }
 
         public Guid StorageModelId { get; set; }
 
-        public StorageModel StorageModel { get; set; }
+        public virtual StorageModel StorageModel { get; set; }
     }
 }

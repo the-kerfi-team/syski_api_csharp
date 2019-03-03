@@ -14,7 +14,7 @@ namespace csharp.Data
 
         public string UserId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public string TokenType { get; set; }
 
@@ -34,11 +34,11 @@ namespace csharp.Data
 
         public Guid? NextTokenId { get; set; }
 
-        public Token NextToken { get; set; }
+        public virtual Token NextToken { get; set; }
 
         public Guid? PreviousTokenId { get; set; }
 
-        public Token PreviousToken { get; set; }
+        public virtual Token PreviousToken { get; set; }
 
     }
 }

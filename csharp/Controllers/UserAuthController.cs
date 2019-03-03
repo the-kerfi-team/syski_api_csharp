@@ -52,8 +52,9 @@ namespace csharp.Controllers
                 {
                     Id = token.User.Id,
                     Email = token.User.Email,
-                    Token = GenerateJwtToken(token),
-                    RefreshToken = refreshToken
+                    AccessToken = GenerateJwtToken(token),
+                    RefreshToken = refreshToken,
+                    Expiry = token.Expires
                 });
             }
 
@@ -85,8 +86,9 @@ namespace csharp.Controllers
                 {
                     Id = token.User.Id,
                     Email = token.User.Email,
-                    Token = GenerateJwtToken(token),
-                    RefreshToken = refreshToken
+                    AccessToken = GenerateJwtToken(token),
+                    RefreshToken = refreshToken,
+                    Expiry = token.Expires
                 });
             }
 
@@ -106,9 +108,11 @@ namespace csharp.Controllers
                 Token token = _tokenManager.CreateToken(user, ref refreshToken, claimsIdentity.FindFirst("jti").Value);
                 return Ok(new UserTokenDTO()
                 {
+                    Id = token.User.Id,
                     Email = token.User.Email,
-                    Token = GenerateJwtToken(token),
-                    RefreshToken = refreshToken
+                    AccessToken = GenerateJwtToken(token),
+                    RefreshToken = refreshToken,
+                    Expiry = token.Expires
                 });
             }
             return BadRequest();

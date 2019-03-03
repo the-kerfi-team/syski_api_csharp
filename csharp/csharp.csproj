@@ -8,17 +8,44 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20190212165422_InitialCreate.cs" />
     <Compile Remove="Data\Migrations\20190212165422_InitialCreate.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190215215743_CreateSystems.cs" />
+    <Compile Remove="Data\Migrations\20190215215743_CreateSystems.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190215220047_CreateCPUs.cs" />
+    <Compile Remove="Data\Migrations\20190215220047_CreateCPUs.Designer.cs" />
     <Compile Remove="Data\Migrations\20190215220258_CreateCPs.cs" />
     <Compile Remove="Data\Migrations\20190215220258_CreateCPs.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190215220318_CreateOSs.cs" />
+    <Compile Remove="Data\Migrations\20190215220318_CreateOSs.Designer.cs" />
     <Compile Remove="Data\Migrations\20190217161515_AddTokens.cs" />
     <Compile Remove="Data\Migrations\20190217161515_AddTokens.Designer.cs" />
     <Compile Remove="Data\Migrations\20190217172713_Test.cs" />
     <Compile Remove="Data\Migrations\20190217172713_Test.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190217172758_AddTokens.cs" />
+    <Compile Remove="Data\Migrations\20190217172758_AddTokens.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190220200521_AddUserAndSystemRelationship.cs" />
+    <Compile Remove="Data\Migrations\20190220200521_AddUserAndSystemRelationship.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190221190123_AddNullableSystemModel.cs" />
+    <Compile Remove="Data\Migrations\20190221190123_AddNullableSystemModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190221201420_RemoveRedundantDataAndMoveATable.cs" />
+    <Compile Remove="Data\Migrations\20190221201420_RemoveRedundantDataAndMoveATable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190223143302_MakeLazyLoading.cs" />
+    <Compile Remove="Data\Migrations\20190223143302_MakeLazyLoading.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190227183633_CreateStorages.cs" />
+    <Compile Remove="Data\Migrations\20190227183633_CreateStorages.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190228140126_CreateGPUs.cs" />
+    <Compile Remove="Data\Migrations\20190228140126_CreateGPUs.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190228142931_CreateMotherboards.cs" />
+    <Compile Remove="Data\Migrations\20190228142931_CreateMotherboards.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190302135307_DefaultMigration.cs" />
+    <Compile Remove="Data\Migrations\20190302135307_DefaultMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190302153936_BigMigration.cs" />
+    <Compile Remove="Data\Migrations\20190302153936_BigMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.1.7" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.7" PrivateAssets="All" />
   </ItemGroup>
 
