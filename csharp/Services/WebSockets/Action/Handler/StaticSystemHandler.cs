@@ -1,4 +1,4 @@
-﻿using csharp.Data;
+using csharp.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +78,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                 }
                 system.ModelId = model.Id;
                 system.HostName = hostNameFromJSON;
+                system.LastUpdated = DateTime.Now;
 
                 context.Update(system);
                 context.SaveChanges();
