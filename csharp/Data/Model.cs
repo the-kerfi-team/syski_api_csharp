@@ -19,8 +19,8 @@ namespace csharp.Data
 
         public virtual ProcessorModel ProcessorModel { get; set; }
 
-        public MemoryModel MemoryModel { get; set; }
+        public virtual MemoryModel MemoryModel { get; set; }
 
-        public MotherboardModel MotherboardModel { get; set; }
+        public virtual MotherboardModel MotherboardModel { get; set; }
     }
 }

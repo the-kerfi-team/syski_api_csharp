@@ -18,7 +18,7 @@ namespace csharp.Data
 
         public Guid? ModelId { get; set; }
 
-        public Model Model { get; set; }
+        public virtual Model Model { get; set; }
 
         public virtual List<SystemModelType> SystemTypes { get; set; }
 

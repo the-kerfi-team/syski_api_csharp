@@ -15,7 +15,6 @@ namespace csharp.Data
 
         public Guid SystemId { get; set; }
 
-        [ForeignKey("SystemId")]
         public virtual System System { get; set; }
 
     }
