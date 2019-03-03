@@ -23,8 +23,8 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet("{SystemId}")]
-        public async Task<IActionResult> GetOSs(Guid SystemId)
+        [HttpGet("{systemId}")]
+        public async Task<IActionResult> GetOSs(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems
                 .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();
@@ -32,7 +32,7 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            var SystemOSs = _context.SystemOSs.Where(so => so.SystemId == SystemId).ToList();
+            var SystemOSs = _context.SystemOSs.Where(so => so.SystemId == systemId).ToList();
 
             var OSDTOs = new List<OSDTO>();
             foreach(var item in SystemOSs)
