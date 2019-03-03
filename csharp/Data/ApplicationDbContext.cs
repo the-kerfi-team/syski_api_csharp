@@ -111,7 +111,7 @@ namespace csharp.Data
 
             ProcessorModel.HasOne(pm => pm.Model)
                 .WithOne(m => m.ProcessorModel)
-                .HasForeignKey<ProcessorModel>(pm => pm.Id)
+                .HasForeignKey<ProcessorModel>(pm => pm.ModelId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             var SystemCPU = builder.Entity<SystemCPU>();
@@ -184,10 +184,6 @@ namespace csharp.Data
 
             GPUModel.HasOne(gm => gm.RAMModel)
                 .WithOne(rm => rm.GPUModel)
-                .HasForeignKey<GPUModel>(gm => gm.Id);
-
-            GPUModel.HasOne(gm => gm.ProcessorModel)
-                .WithOne(pm => pm.GPUModel)
                 .HasForeignKey<GPUModel>(gm => gm.Id);
 
             var SystemGPU = builder.Entity<SystemGPU>();

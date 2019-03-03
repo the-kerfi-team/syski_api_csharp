@@ -9,17 +9,13 @@ namespace csharp.Data
     {
         public Guid Id { get; set; }
 
+        public Guid ModelId { get; set; }
+
         public virtual Model Model { get; set; }
 
         public Guid ArchitectureId { get; set; }
 
         public virtual Architecture Architecture { get; set; }
-
-        public int ClockSpeed { get; set; }
-
-        public int CoreCount { get; set; }
-
-        public int ThreadCount { get; set; }
 
         public virtual List<SystemCPU> SystemCPUs { get; set; }
 

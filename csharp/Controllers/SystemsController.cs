@@ -35,15 +35,6 @@ namespace csharp.Controllers
             return Ok(systemDTOs);
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetSystem(Guid Id)
-        {
-            if (await _context.Systems.FindAsync(Id) == null)
-                return NotFound();
-
-            return Ok(CreateDTO(await _context.Systems.FindAsync(Id)));
-        }
-
         private SystemDTO CreateDTO(csharp.Data.System item)
         {
             var systemDTO = new SystemDTO()

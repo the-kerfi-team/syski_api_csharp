@@ -14,5 +14,12 @@ namespace csharp.Data
         public Guid CPUModelID { get; set; }
 
         public virtual ProcessorModel ProcessorModel { get; set; }
+
+        public int ClockSpeed { get; set; }
+
+        public int CoreCount { get; set; }
+
+        public int ThreadCount { get; set; }
+
     }
 }

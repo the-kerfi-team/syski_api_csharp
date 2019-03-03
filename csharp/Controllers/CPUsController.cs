@@ -57,9 +57,9 @@ namespace csharp.Controllers
                 ModelName = model.Name,
                 ManufacturerName = manufacturer.Name,
                 ArchitectureName = architecture.Name,
-                ClockSpeed = processorModel.ClockSpeed,
-                CoreCount = processorModel.CoreCount,
-                ThreadCount = processorModel.ThreadCount
+                ClockSpeed = systemCPU.ClockSpeed,
+                CoreCount = systemCPU.CoreCount,
+                ThreadCount = systemCPU.ThreadCount
             };
 
             return CPUDTO;

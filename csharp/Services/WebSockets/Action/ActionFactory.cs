@@ -31,6 +31,11 @@ namespace csharp.Services.WebSockets.Action
                         result = new StaticSystemHandler(serviceProvider, webSocket, action);
                         break;
                     }
+                case "staticcpu":
+                    {
+                        result = new StaticCPUHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
             }
             return result;
         }
@@ -63,6 +68,15 @@ namespace csharp.Services.WebSockets.Action
                         result = new Action()
                         {
                             action = "staticsystem",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "staticcpu":
+                    {
+                        result = new Action()
+                        {
+                            action = "staticcpu",
                             properties = actionProperties
                         };
                         break;

@@ -23,15 +23,27 @@ namespace csharp.Services.WebSockets
 
         public void addDefaultTasks()
         {
-            var TaskStaticSystemData = new ActionTask()
+            List<ActionTask> taskList = new List<ActionTask>();
+            taskList.Add(new ActionTask()
             {
                 action = ActionFactory.createAction("staticsystem"),
                 delay = 86400,
                 repeat = true,
                 webSocket = _WebSocket,
                 runAtDateTime = DateTime.Now
-            };
-            _TaskQueue.Add(TaskStaticSystemData);
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticcpu"),
+                delay = 86400,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            foreach (ActionTask action in taskList)
+            {
+                _TaskQueue.Add(action);
+            }
         }
 
         public void addTask(ActionTask task)

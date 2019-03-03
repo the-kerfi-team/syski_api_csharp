@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190303195450_ChangeProcessor")]
+    partial class ChangeProcessor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,23 +188,17 @@ namespace csharp.Data.Migrations
 
             modelBuilder.Entity("csharp.Data.ProcessorModel", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id");
 
                     b.Property<Guid>("ArchitectureId");
 
                     b.Property<Guid?>("GPUModelId");
-
-                    b.Property<Guid>("ModelId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ArchitectureId");
 
                     b.HasIndex("GPUModelId");
-
-                    b.HasIndex("ModelId")
-                        .IsUnique();
 
                     b.ToTable("ProcessorModels");
                 });
@@ -567,7 +563,7 @@ namespace csharp.Data.Migrations
 
                     b.HasOne("csharp.Data.Model", "Model")
                         .WithOne("ProcessorModel")
-                        .HasForeignKey("csharp.Data.ProcessorModel", "ModelId")
+                        .HasForeignKey("csharp.Data.ProcessorModel", "Id")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
