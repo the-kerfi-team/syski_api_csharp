@@ -11,7 +11,7 @@ namespace csharp.Data
 
         public virtual System System { get; set; }
 
-        public Guid OSId { get; set; }
+        public Guid OperatingSystemId { get; set; }
 
         public virtual OperatingSystem OperatingSystem { get; set; }
 
@@ -20,5 +20,8 @@ namespace csharp.Data
         public virtual Architecture Architecture { get; set; }
 
         public string Version { get; set; }
+
+        public DateTime LastUpdated { get; set; }
+
     }
 }

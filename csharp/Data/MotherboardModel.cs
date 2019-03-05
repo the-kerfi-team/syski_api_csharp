@@ -9,12 +9,12 @@ namespace csharp.Data
     {
         public Guid Id { get; set; }
 
-        public virtual Model Model { get; set; }
+        public Guid ModelId { get; set; }
 
-        public string SerialNumber { get; set; }
+        public virtual Model Model { get; set; }
 
         public string Version { get; set; }
 
-        public virtual List<System> Systems { get; set; }
+        public virtual List<SystemMotherboard> SystemMotherboards { get; set; }
     }
 }

@@ -9,10 +9,13 @@ namespace csharp.Data
     {
         public Guid Id { get; set; }
 
-        public virtual MemoryModel MemoryModel { get; set; }
+        public Guid ModelId { get; set; }
+
+        public virtual Model Model { get; set; }
+
+        public long Size { get; set; }
 
         public virtual List<SystemRAM> SystemRAMs { get; set; }
 
-        public virtual GPUModel GPUModel { get; set; }
     }
 }

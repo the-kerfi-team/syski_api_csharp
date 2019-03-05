@@ -45,12 +45,12 @@ namespace csharp.Controllers
 
         private OSDTO CreateDTO(SystemOS SystemOS)
         {
-            var OperatingSystem = _context.OperatingSystems.Find(SystemOS.OSId);
+            var OperatingSystem = _context.OperatingSystems.Find(SystemOS.OperatingSystemId);
             var Architecture = _context.Architectures.Find(SystemOS.ArchitectureId);
 
             var OSDTO = new OSDTO()
             {
-                Id = SystemOS.OSId,
+                Id = SystemOS.OperatingSystemId,
                 Name = OperatingSystem.Name,
                 ArchitectureName = Architecture.Name,
                 Version = SystemOS.Version

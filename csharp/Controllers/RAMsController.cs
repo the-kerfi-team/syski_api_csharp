@@ -46,18 +46,18 @@ namespace csharp.Controllers
 
         private RAMDTO CreateDTO(SystemRAM systemRAM)
         {
-            MemoryModel MemoryModel = _context.MemoryModels.Find(systemRAM.RAMModelId);
-            Model Model = _context.Models.Find(systemRAM.RAMModelId);
+            RAMModel MemoryModel = _context.RAMModels.Find(systemRAM.RAMModelId);
+            Model Model = _context.Models.Find(MemoryModel.ModelId);
             Manufacturer Manufacturer = _context.Manufacturers.Find(Model.ManufacturerId);
-            MemoryType MemoryType = _context.MemoryTypes.Find(MemoryModel.MemoryTypeId);
+            StorageType StorageType = _context.StorageTypes.Find(systemRAM.TypeId);
 
             RAMDTO ramDTO = new RAMDTO()
             {
                 Id = systemRAM.RAMModelId,
                 ModelName = Model.Name,
                 ManufacturerName = Manufacturer.Name,
-                MemoryTypeName = MemoryType.Name,
-                MemoryBytes = MemoryModel.MemoryBytes
+                MemoryTypeName = (StorageType != null ? StorageType.Name : null),
+                MemoryBytes = MemoryModel.Size
             };
 
             return ramDTO;

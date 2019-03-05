@@ -23,15 +23,67 @@ namespace csharp.Services.WebSockets
 
         public void addDefaultTasks()
         {
-            var TaskStaticSystemData = new ActionTask()
+            List<ActionTask> taskList = new List<ActionTask>();
+            taskList.Add(new ActionTask()
             {
                 action = ActionFactory.createAction("staticsystem"),
                 delay = 86400,
                 repeat = true,
                 webSocket = _WebSocket,
                 runAtDateTime = DateTime.Now
-            };
-            _TaskQueue.Add(TaskStaticSystemData);
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticcpu"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticram"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticos"),
+                delay = 21600,
+                repeat = true,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticgpu"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticmotherboard"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticstorage"),
+                delay = 21600,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            foreach (ActionTask action in taskList)
+            {
+                _TaskQueue.Add(action);
+            }
         }
 
         public void addTask(ActionTask task)

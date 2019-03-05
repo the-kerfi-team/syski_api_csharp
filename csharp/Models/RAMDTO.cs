@@ -15,6 +15,6 @@ namespace csharp.Models
 
         public string MemoryTypeName { get; set; }
 
-        public int MemoryBytes { get; set; }
+        public long MemoryBytes { get; set; }
     }
 }

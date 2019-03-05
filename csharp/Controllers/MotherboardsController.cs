@@ -33,24 +33,24 @@ namespace csharp.Controllers
                 return NotFound();
 
             var System = _context.Systems.Find(systemId);
-            var Motherboard = _context.MotherboardModels.Find(System.MotherboardId);
+            var Motherboard = _context.SystemMotherboards.Find(System.Id);
             var MotherboardDTO = CreateDTO(Motherboard);
 
             return Ok(MotherboardDTO);
         }
 
-        private MotherboardDTO CreateDTO(MotherboardModel motherboardModel)
+        private MotherboardDTO CreateDTO(SystemMotherboard systemMotherboard)
         {
-            var Model = _context.Models.Find(motherboardModel.Id);
+            var MotherboardModel = _context.MotherboardModels.Find(systemMotherboard.MotherboardModelId);
+            var Model = _context.Models.Find(MotherboardModel.ModelId);
             var Manufacturer = _context.Manufacturers.Find(Model.ManufacturerId);
 
             var MotherboardDTO = new MotherboardDTO()
             {
-                Id = motherboardModel.Id,
+                Id = MotherboardModel.Id,
                 ModelName = Model.Name,
                 ManufacturerName = Manufacturer.Name,
-                SerialNumber = motherboardModel.SerialNumber,
-                Version = motherboardModel.Version
+                Version = MotherboardModel.Version
             };
 
             return MotherboardDTO;
