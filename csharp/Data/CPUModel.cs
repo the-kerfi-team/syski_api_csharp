@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace csharp.Data
 {
-    public class ProcessorModel
+    public class CPUModel
     {
         public Guid Id { get; set; }
 
@@ -19,6 +19,5 @@ namespace csharp.Data
 
         public virtual List<SystemCPU> SystemCPUs { get; set; }
 
-        public virtual GPUModel GPUModel { get; set; }
     }
 }

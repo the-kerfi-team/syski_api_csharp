@@ -36,6 +36,36 @@ namespace csharp.Services.WebSockets.Action
                         result = new StaticCPUHandler(serviceProvider, webSocket, action);
                         break;
                     }
+                case "staticos":
+                    {
+                        result = new StaticOperatingSystemHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                case "staticram":
+                    {
+                        result = new StaticRAMHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                case "staticgpu":
+                    {
+                        result = new StaticGPUHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                case "staticmotherboard":
+                    {
+                        result = new StaticMotherboardHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                case "staticstorage":
+                    {
+                        result = new StaticMotherboardHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                default:
+                    {
+                        result = new DefaultHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
             }
             return result;
         }
@@ -77,6 +107,79 @@ namespace csharp.Services.WebSockets.Action
                         result = new Action()
                         {
                             action = "staticcpu",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "staticgpu":
+                    {
+                        result = new Action()
+                        {
+                            action = "staticgpu",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "staticram":
+                    {
+                        result = new Action()
+                        {
+                            action = "staticram",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "staticmotherboard":
+                    {
+                        result = new Action()
+                        {
+                            action = "staticmotherboard",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "staticos":
+                    {
+                        result = new Action()
+                        {
+                            action = "staticos",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "staticstorage":
+                    {
+                        result = new Action()
+                        {
+                            action = "staticstorage",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "shutdown":
+                    {
+                        result = new Action()
+                        {
+                            action = "shutdown",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "restart":
+                    {
+                        result = new Action()
+                        {
+                            action = "restart",
+                            properties = actionProperties
+                        };
+                        break;
+                    }
+                case "error":
+                default:
+                    {
+                        result = new Action()
+                        {
+                            action = "error",
                             properties = actionProperties
                         };
                         break;

@@ -49,7 +49,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                     authJson.Add("system", system.Id);
                     authJson.Add("secret", system.Secret);
 
-                    SendMessageAsync(JsonConvert.SerializeObject(ActionFactory.createAction("authentication", authJson)));
+                    SendMessageAsync(ActionFactory.createAction("authentication", authJson));
 
                     websocketManager.AddSocket(system.Id, _WebSocket);
                 }

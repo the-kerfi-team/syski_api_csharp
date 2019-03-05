@@ -48,11 +48,11 @@ namespace csharp.Controllers
                 var model = _context.Models.Find(item.ModelId);
                 var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);
 
-                var systemModelTypes = _context.SystemModelTypes
+                var systemTypes = _context.SystemTypes
                                                 .Where(smt => smt.SystemId == item.ModelId)
                                                 .ToList();
                 var types = new List<Data.Type>();
-                foreach (var systemModelType in systemModelTypes)
+                foreach (var systemModelType in systemTypes)
                 {
                     types.Add(_context.Types.Find(systemModelType.TypeId));
                 }

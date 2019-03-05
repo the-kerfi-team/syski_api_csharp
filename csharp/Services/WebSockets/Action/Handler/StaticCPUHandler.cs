@@ -23,7 +23,6 @@ namespace csharp.Services.WebSockets.Action.Handler
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();
             if (system != null)
             {
-                //string cpuIdFromJSON = (string)_Action.properties.SelectToken("id");
                 string modelFromJSON = (string)_Action.properties.SelectToken("model");
                 string manufacturerFromJSON = (string)_Action.properties.SelectToken("manufacturer");
                 string architectureFromJSON = (string)_Action.properties.SelectToken("architecture");
@@ -65,10 +64,10 @@ namespace csharp.Services.WebSockets.Action.Handler
                     context.SaveChanges();
                 }
 
-                var processormodel = context.ProcessorModels.Where(m => m.ModelId == model.Id && m.ArchitectureId == architecture.Id).FirstOrDefault();
+                var processormodel = context.CPUModels.Where(m => m.ModelId == model.Id && m.ArchitectureId == architecture.Id).FirstOrDefault();
                 if (processormodel == null)
                 {
-                    processormodel = new ProcessorModel
+                    processormodel = new CPUModel
                     {
                         ModelId = model.Id,
                         ArchitectureId = architecture.Id

@@ -9,10 +9,10 @@ using Newtonsoft.Json.Linq;
 
 namespace csharp.Services.WebSockets.Action.Handler
 {
-    public class StaticRAMHandler : ActionHandler
+    public class StaticStorageHandler : ActionHandler
     {
 
-        public StaticRAMHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public StaticStorageHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
         }
 
@@ -24,14 +24,13 @@ namespace csharp.Services.WebSockets.Action.Handler
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();
             if (system != null)
             {
-                JArray ramArray = (JArray)_Action.properties.SelectToken("ram");
-                foreach (JToken ram in ramArray)
+                JArray storageArray = (JArray)_Action.properties.SelectToken("storage");
+                foreach (JToken storage in storageArray)
                 {
-                    string modelFromJSON = (string) ram.SelectToken("model");
-                    string manufacturerFromJSON = (string) ram.SelectToken("manufacturer");
-                    string typeFromJSON = (string) ram.SelectToken("type");
-                    int speedFromJSON = (int) ram.SelectToken("speed");
-                    long sizeFromJSON = (long) ram.SelectToken("size");
+                    string modelFromJSON = (string) storage.SelectToken("model");
+                    string manufacturerFromJSON = (string) storage.SelectToken("manufacturer");
+                    string interfaceFromJSON = (string) storage.SelectToken("interface");
+                    long sizeFromJSON = (long) storage.SelectToken("size");
 
                     var manufacturer = context.Manufacturers.Where(m => m.Name == manufacturerFromJSON).FirstOrDefault();
                     if (manufacturer == null)
@@ -56,41 +55,40 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.SaveChanges();
                     }
 
-                    var storagetype = context.StorageTypes.Where(t => t.Name == typeFromJSON).FirstOrDefault();
-                    if (storagetype == null)
+                    var storagemodel = context.StorageModels.Where(t => t.ModelId == model.Id && t.Size == sizeFromJSON).FirstOrDefault();
+                    if (storagemodel == null)
                     {
-                        storagetype = new StorageType
-                        {
-                            Name = typeFromJSON
-                        };
-                        context.Add(storagetype);
-                        context.SaveChanges();
-                    }
-
-                    var rammodel = context.RAMModels.Where(t => t.ModelId == model.Id && t.Size == sizeFromJSON).FirstOrDefault();
-                    if (rammodel == null)
-                    {
-                        rammodel = new RAMModel
+                        storagemodel = new StorageModel
                         {
                             ModelId = model.Id,
                             Size = sizeFromJSON
                         };
-                        context.Add(rammodel);
+                        context.Add(storagemodel);
                         context.SaveChanges();
                     }
 
-                    var systemram = context.SystemRAMs.Where(t => t.SystemId == system.Id && t.RAMModelId == rammodel.Id).FirstOrDefault();
-                    if (systemram == null)
+                    var interfacetype = context.InterfaceTypes.Where(t => t.Name == interfaceFromJSON).FirstOrDefault();
+                    if (interfacetype == null)
                     {
-                        systemram = new SystemRAM
+                        interfacetype = new InterfaceType()
+                        {
+                            Name = interfaceFromJSON
+                        };
+                        context.Add(interfacetype);
+                        context.SaveChanges();
+                    }
+
+                    var systemstorage = context.SystemStorages.Where(t => t.SystemId == system.Id && t.StorageModelId == storagemodel.Id).FirstOrDefault();
+                    if (systemstorage == null)
+                    {
+                        systemstorage = new SystemStorage
                         {
                             SystemId = system.Id,
-                            RAMModelId = rammodel.Id,
-                            Speed = speedFromJSON,
-                            TypeId = storagetype.Id,
+                            StorageModelId = storagemodel.Id,
+                            InterfaceId = interfacetype.Id,
                             LastUpdated = DateTime.Now
                         };
-                        context.Add(systemram);
+                        context.Add(systemstorage);
                         context.SaveChanges();
                     }
 

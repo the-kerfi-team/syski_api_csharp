@@ -46,7 +46,7 @@ namespace csharp.Controllers
 
         private CPUDTO CreateDTO(SystemCPU systemCPU)
         {
-            var processorModel = _context.ProcessorModels.Find(systemCPU.CPUModelID);
+            var processorModel = _context.CPUModels.Find(systemCPU.CPUModelID);
             var architecture = _context.Architectures.Find(processorModel.ArchitectureId);
             var model = _context.Models.Find(processorModel.Id);
             var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);

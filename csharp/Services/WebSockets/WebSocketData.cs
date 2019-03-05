@@ -35,7 +35,47 @@ namespace csharp.Services.WebSockets
             taskList.Add(new ActionTask()
             {
                 action = ActionFactory.createAction("staticcpu"),
-                delay = 86400,
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticram"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticos"),
+                delay = 21600,
+                repeat = true,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticgpu"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticmotherboard"),
+                delay = 0,
+                repeat = false,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("staticstorage"),
+                delay = 21600,
                 repeat = false,
                 webSocket = _WebSocket,
                 runAtDateTime = DateTime.Now

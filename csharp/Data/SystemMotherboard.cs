@@ -5,14 +5,18 @@ using System.Threading.Tasks;
 
 namespace csharp.Data
 {
-    public class SystemModelType
+    public class SystemMotherboard
     {
+
         public Guid SystemId { get; set; }
 
         public virtual System System { get; set; }
-        
-        public Guid TypeId { get; set; }
 
-        public virtual Type Type { get; set; }
+        public Guid MotherboardModelId { get; set; }
+
+        public virtual MotherboardModel MotherboardModel { get; set; }
+
+        public DateTime LastUpdated { get; set; }
+
     }
 }

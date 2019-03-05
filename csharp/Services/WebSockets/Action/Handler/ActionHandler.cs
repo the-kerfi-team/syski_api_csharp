@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
@@ -28,6 +29,11 @@ namespace csharp.Services.WebSockets.Action.Handler
             {
                 await _WebSocket.SendAsync(buffer: new ArraySegment<byte>(array: Encoding.ASCII.GetBytes(message), offset: 0, count: message.Length), messageType: WebSocketMessageType.Text, endOfMessage: true, cancellationToken: CancellationToken.None);
             }
+        }
+
+        protected async Task SendMessageAsync(Action action)
+        {
+            await SendMessageAsync(JsonConvert.SerializeObject(action));
         }
 
         public abstract void HandleAction();

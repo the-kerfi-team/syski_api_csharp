@@ -46,21 +46,16 @@ namespace csharp.Controllers
 
         private GPUDTO CreateDTO(SystemGPU systemGPU)
         {
-            var processorModel = _context.ProcessorModels.Find(systemGPU.GPUModelId);
+            var processorModel = _context.CPUModels.Find(systemGPU.GPUModelId);
             var architecture = _context.Architectures.Find(processorModel.ArchitectureId);
             var model = _context.Models.Find(processorModel.Id);
             var manufacturer = _context.Manufacturers.Find(model.ManufacturerId);
-            var MemoryModel = _context.MemoryModels.Find(systemGPU.GPUModelId);
-            var MemoryType = _context.MemoryTypes.Find(MemoryModel.MemoryTypeId);
 
             var GPUDTO = new GPUDTO()
             {
                 Id = systemGPU.GPUModelId,
                 ModelName = model.Name,
                 ManufacturerName = manufacturer.Name,
-                ArchitectureName = architecture.Name,
-                MemoryTypeName = MemoryType.Name,
-                MemoryBytes = MemoryModel.MemoryBytes
             };
 
             return GPUDTO;

@@ -17,9 +17,13 @@ namespace csharp.Data
 
         public virtual List<System> Systems { get; set; }
 
-        public virtual ProcessorModel ProcessorModel { get; set; }
+        public virtual StorageModel StorageModel { get; set; }
 
-        public virtual MemoryModel MemoryModel { get; set; }
+        public virtual CPUModel ProcessorModel { get; set; }
+
+        public virtual RAMModel RAMModel { get; set; }
+
+        public virtual GPUModel GPUModel { get; set; }
 
         public virtual MotherboardModel MotherboardModel { get; set; }
     }
