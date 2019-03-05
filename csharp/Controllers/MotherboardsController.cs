@@ -50,7 +50,7 @@ namespace csharp.Controllers
                 Id = MotherboardModel.Id,
                 ModelName = Model.Name,
                 ManufacturerName = Manufacturer.Name,
-                //Version = motherboardModel.Version
+                Version = MotherboardModel.Version
             };
 
             return MotherboardDTO;

@@ -56,7 +56,7 @@ namespace csharp.Controllers
                 Id = systemRAM.RAMModelId,
                 ModelName = Model.Name,
                 ManufacturerName = Manufacturer.Name,
-                MemoryTypeName = StorageType.Name,
+                MemoryTypeName = (StorageType != null ? StorageType.Name : null),
                 MemoryBytes = MemoryModel.Size
             };
 
