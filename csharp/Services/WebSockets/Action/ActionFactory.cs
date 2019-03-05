@@ -58,7 +58,7 @@ namespace csharp.Services.WebSockets.Action
                     }
                 case "staticstorage":
                     {
-                        result = new StaticMotherboardHandler(serviceProvider, webSocket, action);
+                        result = new StaticStorageHandler(serviceProvider, webSocket, action);
                         break;
                     }
                 default:
