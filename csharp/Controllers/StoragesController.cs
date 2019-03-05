@@ -47,7 +47,7 @@ namespace csharp.Controllers
         private StorageDTO CreateDTO(SystemStorage systemStorage)
         {
             StorageModel MemoryModel = _context.StorageModels.Find(systemStorage.StorageModelId);
-            Model Model = _context.Models.Find(systemStorage.StorageModelId);
+            Model Model = _context.Models.Find(MemoryModel.ModelId);
             Manufacturer Manufacturer = _context.Manufacturers.Find(Model.ManufacturerId);
             StorageType StorageType = _context.StorageTypes.Find(systemStorage.TypeId);
 
