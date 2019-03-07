@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class RAMsController : ControllerBase
     {
@@ -23,7 +22,7 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet("{systemId}")]
+        [HttpGet("/system/{systemId}/ram")]
         public async Task<IActionResult> GetRAMs(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems
@@ -32,7 +31,8 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            var RAMs = _context.SystemRAMs.Where(sc => sc.SystemId == systemId).ToList();
+            DateTime lastUpdated = _context.SystemRAMs.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.LastUpdated).FirstOrDefault().LastUpdated;
+            var RAMs = _context.SystemRAMs.Where(sc => sc.SystemId == systemId && sc.LastUpdated == lastUpdated).ToList();
 
             var RAMDTOs = new List<RAMDTO>();
 

@@ -142,7 +142,7 @@ namespace csharp.Data
                 .HasForeignKey(sr => sr.RAMModelId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId });
+            SystemRAM.HasKey(sr => new { sr.SystemId, sr.RAMModelId, sr.DimmSlot });
 
             // SystemGPU
             var SystemGPU = builder.Entity<SystemGPU>();

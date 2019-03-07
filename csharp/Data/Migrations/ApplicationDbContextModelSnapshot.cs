@@ -342,13 +342,15 @@ namespace csharp.Data.Migrations
 
                     b.Property<Guid>("RAMModelId");
 
+                    b.Property<int>("DimmSlot");
+
                     b.Property<DateTime>("LastUpdated");
 
                     b.Property<int>("Speed");
 
                     b.Property<Guid>("TypeId");
 
-                    b.HasKey("SystemId", "RAMModelId");
+                    b.HasKey("SystemId", "RAMModelId", "DimmSlot");
 
                     b.HasIndex("RAMModelId");
 

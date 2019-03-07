@@ -540,13 +540,14 @@ namespace csharp.Data.Migrations
                 {
                     SystemId = table.Column<Guid>(nullable: false),
                     RAMModelId = table.Column<Guid>(nullable: false),
+                    DimmSlot = table.Column<int>(nullable: false),
                     TypeId = table.Column<Guid>(nullable: false),
                     Speed = table.Column<int>(nullable: false),
                     LastUpdated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemRAMs", x => new { x.SystemId, x.RAMModelId });
+                    table.PrimaryKey("PK_SystemRAMs", x => new { x.SystemId, x.RAMModelId, x.DimmSlot });
                     table.ForeignKey(
                         name: "FK_SystemRAMs_RAMModels_RAMModelId",
                         column: x => x.RAMModelId,

@@ -16,7 +16,7 @@ namespace csharp.Data
 
         public virtual RAMModel RAMModel { get; set; }
 
-       // public int Count { get; set; }
+        public int DimmSlot { get; set; }
 
         public Guid TypeId { get; set; }
 

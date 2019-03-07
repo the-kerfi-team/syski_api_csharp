@@ -72,120 +72,20 @@ namespace csharp.Services.WebSockets.Action
 
         public static Action createAction(string actionName)
         {
-            return createAction(actionName, new JObject());
+            return createAction(actionName, null);
         }
 
         public static Action createAction(string actionName, JObject actionProperties)
         {
-            Action result = null;
             if (actionProperties == null)
             {
                 actionProperties = new JObject();
             }
-            switch (actionName)
+            return new Action()
             {
-                case "authentication":
-                    {
-                        result = new Action()
-                        {
-                            action = "authentication",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticsystem":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticsystem",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticcpu":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticcpu",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticgpu":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticgpu",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticram":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticram",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticmotherboard":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticmotherboard",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticos":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticos",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "staticstorage":
-                    {
-                        result = new Action()
-                        {
-                            action = "staticstorage",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "shutdown":
-                    {
-                        result = new Action()
-                        {
-                            action = "shutdown",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "restart":
-                    {
-                        result = new Action()
-                        {
-                            action = "restart",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-                case "error":
-                default:
-                    {
-                        result = new Action()
-                        {
-                            action = "error",
-                            properties = actionProperties
-                        };
-                        break;
-                    }
-            }
-            return result;
+                action = actionName,
+                properties = actionProperties
+            };
         }
 
     }

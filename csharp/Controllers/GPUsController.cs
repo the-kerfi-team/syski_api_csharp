@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class GPUsController : ControllerBase
     {
@@ -23,7 +22,7 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet("{systemId}")]
+        [HttpGet("/system/{systemId}/gpu")]
         public async Task<IActionResult> GetGPUs(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems
