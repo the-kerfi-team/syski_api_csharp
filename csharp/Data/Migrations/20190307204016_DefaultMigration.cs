@@ -540,13 +540,14 @@ namespace csharp.Data.Migrations
                 {
                     SystemId = table.Column<Guid>(nullable: false),
                     RAMModelId = table.Column<Guid>(nullable: false),
+                    DimmSlot = table.Column<int>(nullable: false),
                     TypeId = table.Column<Guid>(nullable: false),
                     Speed = table.Column<int>(nullable: false),
                     LastUpdated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemRAMs", x => new { x.SystemId, x.RAMModelId });
+                    table.PrimaryKey("PK_SystemRAMs", x => new { x.SystemId, x.RAMModelId, x.DimmSlot });
                     table.ForeignKey(
                         name: "FK_SystemRAMs_RAMModels_RAMModelId",
                         column: x => x.RAMModelId,
@@ -573,13 +574,14 @@ namespace csharp.Data.Migrations
                 {
                     SystemId = table.Column<Guid>(nullable: false),
                     StorageModelId = table.Column<Guid>(nullable: false),
+                    Slot = table.Column<int>(nullable: false),
                     InterfaceId = table.Column<Guid>(nullable: false),
                     TypeId = table.Column<Guid>(nullable: true),
                     LastUpdated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemStorages", x => new { x.SystemId, x.StorageModelId });
+                    table.PrimaryKey("PK_SystemStorages", x => new { x.SystemId, x.StorageModelId, x.Slot });
                     table.ForeignKey(
                         name: "FK_SystemStorages_InterfaceTypes_InterfaceId",
                         column: x => x.InterfaceId,

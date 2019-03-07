@@ -85,7 +85,7 @@ namespace csharp.Services.WebSockets
                 {
                     await webSocket._WebSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Closed by the Server", cancellationToken: CancellationToken.None);
                 }
-                catch (WebSocketException e)
+                catch (WebSocketException wse)
                 {
 
                 }

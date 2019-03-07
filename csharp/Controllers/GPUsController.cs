@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class GPUsController : ControllerBase
     {
@@ -23,8 +22,8 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet("{systemId}")]
-        public async Task<IActionResult> GetGPUs(Guid systemId)
+        [HttpGet("/system/{systemId}/gpu")]
+        public IActionResult GetGPUs(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems
                 .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();

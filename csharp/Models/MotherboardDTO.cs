@@ -13,8 +13,6 @@ namespace csharp.Models
 
         public string ManufacturerName { get; set; }
 
-        public string SerialNumber { get; set; }
-
         public string Version { get; set; }
     }
 }

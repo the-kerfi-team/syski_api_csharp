@@ -48,7 +48,7 @@ namespace csharp.Services.WebSockets
                 {
                     await webSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Failed Authentication", cancellationToken: CancellationToken.None);
                 }
-                catch (WebSocketException e)
+                catch (WebSocketException wse)
                 {
 
                 }
@@ -74,7 +74,7 @@ namespace csharp.Services.WebSockets
             await SendMessageAsync(_WebSocketManager.GetSocketById(Id), message);
         }
 
-        public async Task ReceiveAsync(WebSocket webSocket, WebSocketReceiveResult result, byte[] buffer)
+        public void ReceiveAsync(WebSocket webSocket, WebSocketReceiveResult result, byte[] buffer)
         {
             Action.Action action = JsonConvert.DeserializeObject<Action.Action>(Encoding.UTF8.GetString(buffer, 0, result.Count));
             ActionFactory.createActionHandler(_ServiceProvider, webSocket, action).HandleAction();

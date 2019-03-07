@@ -15,6 +15,8 @@ namespace csharp.Data
 
         public virtual StorageModel StorageModel { get; set; }
 
+        public int Slot { get; set; }
+
         public Guid InterfaceId { get; set; }
 
         public InterfaceType Interface { get; set; }

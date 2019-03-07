@@ -24,7 +24,10 @@ namespace csharp.Services.WebSockets.Action.Handler
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();
             if (system != null)
             {
+                DateTime lastUpdated = DateTime.Now;
+                int slot = 0;
                 JArray storageArray = (JArray)_Action.properties.SelectToken("storage");
+
                 foreach (JToken storage in storageArray)
                 {
                     string modelFromJSON = (string) storage.SelectToken("model");
@@ -84,9 +87,10 @@ namespace csharp.Services.WebSockets.Action.Handler
                         systemstorage = new SystemStorage
                         {
                             SystemId = system.Id,
+                            Slot = slot++,
                             StorageModelId = storagemodel.Id,
                             InterfaceId = interfacetype.Id,
-                            LastUpdated = DateTime.Now
+                            LastUpdated = lastUpdated
                         };
                         context.Add(systemstorage);
                         context.SaveChanges();

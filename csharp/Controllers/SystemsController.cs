@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class SystemsController : ControllerBase
     {
@@ -23,7 +22,7 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpGet("/system")]
         public IActionResult GetSystemsIndex()
         {
             var applicationUserSystems = _context.ApplicationUserSystems.Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value).ToList();

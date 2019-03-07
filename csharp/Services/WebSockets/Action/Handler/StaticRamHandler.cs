@@ -24,7 +24,10 @@ namespace csharp.Services.WebSockets.Action.Handler
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();
             if (system != null)
             {
+                DateTime lastUpdated = DateTime.Now;
+                int slot = 0;
                 JArray ramArray = (JArray)_Action.properties.SelectToken("ram");
+                
                 foreach (JToken ram in ramArray)
                 {
                     string modelFromJSON = (string) ram.SelectToken("model");
@@ -86,14 +89,14 @@ namespace csharp.Services.WebSockets.Action.Handler
                         {
                             SystemId = system.Id,
                             RAMModelId = rammodel.Id,
+                            DimmSlot = slot++,
                             Speed = speedFromJSON,
                             TypeId = storagetype.Id,
-                            LastUpdated = DateTime.Now
+                            LastUpdated = lastUpdated
                         };
                         context.Add(systemram);
                         context.SaveChanges();
                     }
-
                 }
             }
         }

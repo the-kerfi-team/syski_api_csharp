@@ -49,7 +49,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                     context.SaveChanges();
                 }
 
-                var systemos = context.SystemOSs.Where(m => m.OperatingSystemId == osname.Id).FirstOrDefault();
+                var systemos = context.SystemOSs.Where(m => m.SystemId == system.Id && m.OperatingSystemId == osname.Id).FirstOrDefault();
                 if (systemos == null)
                 {
                     systemos = new SystemOS()

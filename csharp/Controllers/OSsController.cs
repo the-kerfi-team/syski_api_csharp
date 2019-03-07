@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class OSsController : ControllerBase
     {
@@ -23,7 +22,7 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet("{systemId}")]
+        [HttpGet("/system/{systemId}/operatingsystem")]
         public async Task<IActionResult> GetOSs(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems

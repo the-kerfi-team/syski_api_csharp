@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class StoragesController : ControllerBase
     {
@@ -23,7 +22,7 @@ namespace csharp.Controllers
         }
 
         [Authorize]
-        [HttpGet("{systemId}")]
+        [HttpGet("/system/{systemId}/storage")]
         public async Task<IActionResult> GetStorages(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems
@@ -32,7 +31,8 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            var Storages = _context.SystemStorages.Where(sc => sc.SystemId == systemId).ToList();
+            DateTime lastUpdated = _context.SystemStorages.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.LastUpdated).FirstOrDefault().LastUpdated;
+            var Storages = _context.SystemStorages.Where(sc => sc.SystemId == systemId && sc.LastUpdated == lastUpdated).ToList();
 
             var StorageDTOs = new List<StorageDTO>();
 
