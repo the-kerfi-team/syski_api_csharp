@@ -23,7 +23,7 @@ namespace csharp.Controllers
 
         [Authorize]
         [HttpGet("/system/{systemId}/gpu")]
-        public async Task<IActionResult> GetGPUs(Guid systemId)
+        public IActionResult GetGPUs(Guid systemId)
         {
             var applicationUserSystem = _context.ApplicationUserSystems
                 .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();

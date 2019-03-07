@@ -25,9 +25,9 @@ namespace csharp.Services.WebSockets.Action.Handler
             if (system != null)
             {
                 DateTime lastUpdated = DateTime.Now;
-
-                JArray ramArray = (JArray)_Action.properties.SelectToken("ram");
                 int slot = 0;
+                JArray ramArray = (JArray)_Action.properties.SelectToken("ram");
+                
                 foreach (JToken ram in ramArray)
                 {
                     string modelFromJSON = (string) ram.SelectToken("model");

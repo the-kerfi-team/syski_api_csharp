@@ -32,9 +32,9 @@ namespace csharp.Services.WebSockets
                     {
                         try
                         {
-                            await _WebSocketHandler.ReceiveAsync(webSocket, result, buffer);
+                            _WebSocketHandler.ReceiveAsync(webSocket, result, buffer);
                         }
-                        catch (WebSocketException ex)
+                        catch (WebSocketException wse)
                         {
                             await _WebSocketHandler.OnDisconnected(webSocket);
                         }
@@ -61,7 +61,7 @@ namespace csharp.Services.WebSockets
                     var result = await webSocket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
                     handleMessage(result, buffer);
                 }
-                catch (WebSocketException ex)
+                catch (WebSocketException wse)
                 {
                     await _WebSocketHandler.OnDisconnected(webSocket);
                 }

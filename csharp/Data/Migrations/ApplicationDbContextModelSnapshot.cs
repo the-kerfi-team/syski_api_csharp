@@ -365,13 +365,15 @@ namespace csharp.Data.Migrations
 
                     b.Property<Guid>("StorageModelId");
 
+                    b.Property<int>("Slot");
+
                     b.Property<Guid>("InterfaceId");
 
                     b.Property<DateTime>("LastUpdated");
 
                     b.Property<Guid?>("TypeId");
 
-                    b.HasKey("SystemId", "StorageModelId");
+                    b.HasKey("SystemId", "StorageModelId", "Slot");
 
                     b.HasIndex("InterfaceId");
 

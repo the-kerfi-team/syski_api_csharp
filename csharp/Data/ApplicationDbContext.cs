@@ -182,7 +182,7 @@ namespace csharp.Data
                 .HasForeignKey(ss => ss.TypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            SystemStorage.HasKey(ss => new { ss.SystemId, ss.StorageModelId });
+            SystemStorage.HasKey(ss => new { ss.SystemId, ss.StorageModelId, ss.Slot });
 
             // SystemType
             var SystemType = builder.Entity<SystemType>();

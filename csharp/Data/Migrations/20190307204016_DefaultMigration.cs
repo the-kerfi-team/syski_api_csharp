@@ -574,13 +574,14 @@ namespace csharp.Data.Migrations
                 {
                     SystemId = table.Column<Guid>(nullable: false),
                     StorageModelId = table.Column<Guid>(nullable: false),
+                    Slot = table.Column<int>(nullable: false),
                     InterfaceId = table.Column<Guid>(nullable: false),
                     TypeId = table.Column<Guid>(nullable: true),
                     LastUpdated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemStorages", x => new { x.SystemId, x.StorageModelId });
+                    table.PrimaryKey("PK_SystemStorages", x => new { x.SystemId, x.StorageModelId, x.Slot });
                     table.ForeignKey(
                         name: "FK_SystemStorages_InterfaceTypes_InterfaceId",
                         column: x => x.InterfaceId,

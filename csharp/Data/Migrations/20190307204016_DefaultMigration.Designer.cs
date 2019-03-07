@@ -10,7 +10,7 @@ using csharp.Data;
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190307110843_DefaultMigration")]
+    [Migration("20190307204016_DefaultMigration")]
     partial class DefaultMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -367,13 +367,15 @@ namespace csharp.Data.Migrations
 
                     b.Property<Guid>("StorageModelId");
 
+                    b.Property<int>("Slot");
+
                     b.Property<Guid>("InterfaceId");
 
                     b.Property<DateTime>("LastUpdated");
 
                     b.Property<Guid?>("TypeId");
 
-                    b.HasKey("SystemId", "StorageModelId");
+                    b.HasKey("SystemId", "StorageModelId", "Slot");
 
                     b.HasIndex("InterfaceId");
 
