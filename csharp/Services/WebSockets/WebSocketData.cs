@@ -80,6 +80,14 @@ namespace csharp.Services.WebSockets
                 webSocket = _WebSocket,
                 runAtDateTime = DateTime.Now
             });
+            taskList.Add(new ActionTask()
+            {
+                action = ActionFactory.createAction("variablecpu"),
+                delay = 3,
+                repeat = true,
+                webSocket = _WebSocket,
+                runAtDateTime = DateTime.Now
+            });
             foreach (ActionTask action in taskList)
             {
                 _TaskQueue.Add(action);

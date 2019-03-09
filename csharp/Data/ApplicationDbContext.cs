@@ -32,6 +32,7 @@ namespace csharp.Data
         public DbSet<InterfaceType> InterfaceTypes { get; set; }
         public DbSet<SystemMotherboard> SystemMotherboards { get; set; }
         public DbSet<MotherboardModel> MotherboardModels { get; set; }
+        public DbSet<SystemCPUData> SystemCPUsData { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
@@ -260,6 +261,16 @@ namespace csharp.Data
                 .WithOne(s => s.MotherboardModel)
                 .HasForeignKey(s => s.MotherboardModelId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            var SystemCPUData = builder.Entity<SystemCPUData>();
+
+            SystemCPUData.HasOne(s => s.System)
+                .WithMany(s => s.SystemCPUData)
+                .HasForeignKey(s => s.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemCPUData.HasKey(s => new { s.SystemId, s.CollectionDateTime });
+
         }
   
     }

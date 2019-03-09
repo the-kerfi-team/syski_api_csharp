@@ -35,5 +35,8 @@ namespace csharp.Data
         public virtual List<SystemStorage> SystemStorages { get; set; }
 
         public virtual SystemMotherboard SystemMotherboard { get; set; }
+
+        public virtual List<SystemCPUData> SystemCPUData { get; set; }
+
     }
 }
