@@ -2,10 +2,15 @@ language: csharp
 solution: api.syski.co.uk.sln
 mono: none
 dotnet: 2.1.504
-os: 
- - linux
- - windows
 install:
  - dotnet restore "csharp/csharp.csproj"
 script:
- - dotnet build "csharp/csharp.csproj" -c Release -o /app
+ - dotnet build "csharp/csharp.csproj"
+after_success:
+ - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+ - chmod +x send.sh
+ - ./send.sh success $WEBHOOK_URL
+after_failure:
+ - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+ - chmod +x send.sh
+ - ./send.sh failure $WEBHOOK_URL
