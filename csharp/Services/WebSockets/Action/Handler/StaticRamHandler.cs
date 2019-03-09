@@ -89,7 +89,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                         {
                             SystemId = system.Id,
                             RAMModelId = rammodel.Id,
-                            DimmSlot = slot++,
+                            DimmSlot = slot,
                             Speed = speedFromJSON,
                             TypeId = storagetype.Id,
                             LastUpdated = lastUpdated
@@ -97,6 +97,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.Add(systemram);
                         context.SaveChanges();
                     }
+                    slot++;
                 }
             }
         }

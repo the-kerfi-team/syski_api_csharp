@@ -87,7 +87,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                         systemstorage = new SystemStorage
                         {
                             SystemId = system.Id,
-                            Slot = slot++,
+                            Slot = slot,
                             StorageModelId = storagemodel.Id,
                             InterfaceId = interfacetype.Id,
                             LastUpdated = lastUpdated
@@ -95,7 +95,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.Add(systemstorage);
                         context.SaveChanges();
                     }
-
+                    slot++;
                 }
             }
         }
