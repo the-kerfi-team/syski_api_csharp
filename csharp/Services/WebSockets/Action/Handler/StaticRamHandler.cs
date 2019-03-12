@@ -82,14 +82,14 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.SaveChanges();
                     }
 
-                    var systemram = context.SystemRAMs.Where(t => t.SystemId == system.Id && t.RAMModelId == rammodel.Id).FirstOrDefault();
+                    var systemram = context.SystemRAMs.Where(sr => sr.SystemId == system.Id && sr.RAMModelId == rammodel.Id && sr.DimmSlot == slot).FirstOrDefault();
                     if (systemram == null)
                     {
                         systemram = new SystemRAM
                         {
                             SystemId = system.Id,
                             RAMModelId = rammodel.Id,
-                            DimmSlot = slot++,
+                            DimmSlot = slot,
                             Speed = speedFromJSON,
                             TypeId = storagetype.Id,
                             LastUpdated = lastUpdated
@@ -97,6 +97,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.Add(systemram);
                         context.SaveChanges();
                     }
+                    slot++;
                 }
             }
         }
