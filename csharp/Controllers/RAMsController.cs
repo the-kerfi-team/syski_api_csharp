@@ -44,6 +44,21 @@ namespace csharp.Controllers
             return Ok(RAMDTOs);
         }
 
+        [Authorize]
+        [HttpPost("/system/{systemId}/ram/data")]
+        public async Task<IActionResult> GetRAMData(Guid systemId)
+        {
+            var applicationUserSystem = _context.ApplicationUserSystems
+                .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();
+
+            if (applicationUserSystem == null)
+                return NotFound();
+
+            var CPUsData = _context.SystemCPUsData.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.CollectionDateTime).Take(1);
+
+            return Ok(CPUsData);
+        }
+
         private RAMDTO CreateDTO(SystemRAM systemRAM)
         {
             RAMModel MemoryModel = _context.RAMModels.Find(systemRAM.RAMModelId);
