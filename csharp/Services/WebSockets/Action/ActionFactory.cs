@@ -66,6 +66,21 @@ namespace csharp.Services.WebSockets.Action
                         result = new VariableCPUHandler(serviceProvider, webSocket, action);
                         break;
                     }
+                case "variableram":
+                    {
+                        result = new VariableRAMHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                case "variablestorage":
+                    {
+                        result = new VariableStorageHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
+                case "variablenetwork":
+                    {
+                        result = new VariableNetworkHandler(serviceProvider, webSocket, action);
+                        break;
+                    }
                 default:
                     {
                         result = new DefaultHandler(serviceProvider, webSocket, action);

@@ -38,5 +38,10 @@ namespace csharp.Data
 
         public virtual List<SystemCPUData> SystemCPUData { get; set; }
 
+        public virtual List<SystemRAMData> SystemRAMData { get; set; }
+
+        public virtual List<SystemNetworkData> SystemNetworkData { get; set; }
+
+        public virtual List<SystemStorageData> SystemStorageData { get; set; }
     }
 }

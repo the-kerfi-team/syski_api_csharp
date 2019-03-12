@@ -44,6 +44,21 @@ namespace csharp.Controllers
             return Ok(StorageDTOs);
         }
 
+        [Authorize]
+        [HttpPost("/system/{systemId}/storage/data")]
+        public async Task<IActionResult> GetStorageData(Guid systemId)
+        {
+            var applicationUserSystem = _context.ApplicationUserSystems
+                .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();
+
+            if (applicationUserSystem == null)
+                return NotFound();
+
+            var CPUsData = _context.SystemCPUsData.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.CollectionDateTime).Take(1);
+
+            return Ok(CPUsData);
+        }
+
         private StorageDTO CreateDTO(SystemStorage systemStorage)
         {
             StorageModel MemoryModel = _context.StorageModels.Find(systemStorage.StorageModelId);
