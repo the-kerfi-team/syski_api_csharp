@@ -53,7 +53,7 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            var CPUsData = _context.SystemCPUsData.Where(sc => sc.SystemId == systemId).ToList();
+            var CPUsData = _context.SystemCPUsData.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.CollectionDateTime).Take(1); ;
 
             return Ok(CPUsData);
         }
