@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190309161136_addDynamicCPUData")]
+    partial class addDynamicCPUData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,23 +332,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("SystemMotherboards");
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemNetworkData", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<DateTime>("CollectionDateTime");
-
-                    b.Property<float>("Bandwidth");
-
-                    b.Property<float>("Bytes");
-
-                    b.Property<float>("Packets");
-
-                    b.HasKey("SystemId", "CollectionDateTime");
-
-                    b.ToTable("SystemNetworkData");
-                });
-
             modelBuilder.Entity("csharp.Data.SystemOS", b =>
                 {
                     b.Property<Guid>("SystemId");
@@ -391,19 +376,6 @@ namespace csharp.Data.Migrations
                     b.ToTable("SystemRAMs");
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemRAMData", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<DateTime>("CollectionDateTime");
-
-                    b.Property<int>("Free");
-
-                    b.HasKey("SystemId", "CollectionDateTime");
-
-                    b.ToTable("SystemRAMData");
-                });
-
             modelBuilder.Entity("csharp.Data.SystemStorage", b =>
                 {
                     b.Property<Guid>("SystemId");
@@ -427,29 +399,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("SystemStorages");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemStorageData", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<DateTime>("CollectionDateTime");
-
-                    b.Property<float>("ByteReads");
-
-                    b.Property<float>("ByteWrites");
-
-                    b.Property<float>("Reads");
-
-                    b.Property<float>("Time");
-
-                    b.Property<float>("Transfers");
-
-                    b.Property<float>("Writes");
-
-                    b.HasKey("SystemId", "CollectionDateTime");
-
-                    b.ToTable("SystemStorageData");
                 });
 
             modelBuilder.Entity("csharp.Data.SystemType", b =>
@@ -753,14 +702,6 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemNetworkData", b =>
-                {
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemNetworkData")
-                        .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("csharp.Data.SystemOS", b =>
                 {
                     b.HasOne("csharp.Data.Architecture", "Architecture")
@@ -797,14 +738,6 @@ namespace csharp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("csharp.Data.SystemRAMData", b =>
-                {
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemRAMData")
-                        .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("csharp.Data.SystemStorage", b =>
                 {
                     b.HasOne("csharp.Data.InterfaceType", "Interface")
@@ -825,14 +758,6 @@ namespace csharp.Data.Migrations
                     b.HasOne("csharp.Data.StorageType", "Type")
                         .WithMany("SystemStorages")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemStorageData", b =>
-                {
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemStorageData")
-                        .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
