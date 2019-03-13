@@ -54,7 +54,7 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            var CPUsData = _context.SysteRAMData.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.CollectionDateTime).Take(1);
+            var CPUsData = _context.SystemRAMData.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.CollectionDateTime).Take(1);
 
             return Ok(CPUsData);
         }

@@ -33,7 +33,7 @@ namespace csharp.Data
         public DbSet<SystemMotherboard> SystemMotherboards { get; set; }
         public DbSet<MotherboardModel> MotherboardModels { get; set; }
         public DbSet<SystemCPUData> SystemCPUsData { get; set; }
-        public DbSet<SystemRAMData> SysteRAMData { get; set; }
+        public DbSet<SystemRAMData> SystemRAMData { get; set; }
         public DbSet<SystemStorageData> SystemStorageData { get; set; }
         public DbSet<SystemNetworkData> SystemNetworkData { get; set; }
 
