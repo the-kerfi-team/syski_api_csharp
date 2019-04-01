@@ -32,6 +32,10 @@ namespace csharp.Data
         public DbSet<InterfaceType> InterfaceTypes { get; set; }
         public DbSet<SystemMotherboard> SystemMotherboards { get; set; }
         public DbSet<MotherboardModel> MotherboardModels { get; set; }
+        public DbSet<SystemCPUData> SystemCPUsData { get; set; }
+        public DbSet<SystemRAMData> SystemRAMData { get; set; }
+        public DbSet<SystemStorageData> SystemStorageData { get; set; }
+        public DbSet<SystemNetworkData> SystemNetworkData { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
@@ -260,6 +264,43 @@ namespace csharp.Data
                 .WithOne(s => s.MotherboardModel)
                 .HasForeignKey(s => s.MotherboardModelId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            var SystemCPUData = builder.Entity<SystemCPUData>();
+
+            SystemCPUData.HasOne(s => s.System)
+                .WithMany(s => s.SystemCPUData)
+                .HasForeignKey(s => s.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemCPUData.HasKey(s => new { s.SystemId, s.CollectionDateTime });
+
+            var SystemRAMData = builder.Entity<SystemRAMData>();
+
+            SystemRAMData.HasOne(s => s.System)
+                .WithMany(s => s.SystemRAMData)
+                .HasForeignKey(s => s.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemRAMData.HasKey(s => new { s.SystemId, s.CollectionDateTime });
+
+            var SystemNetworkData = builder.Entity<SystemNetworkData>();
+
+            SystemNetworkData.HasOne(s => s.System)
+                .WithMany(s => s.SystemNetworkData)
+                .HasForeignKey(s => s.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemNetworkData.HasKey(s => new { s.SystemId, s.CollectionDateTime });
+
+            var SystemStorageData = builder.Entity<SystemStorageData>();
+
+            SystemStorageData.HasOne(s => s.System)
+                .WithMany(s => s.SystemStorageData)
+                .HasForeignKey(s => s.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SystemStorageData.HasKey(s => new { s.SystemId, s.CollectionDateTime });
+
         }
   
     }

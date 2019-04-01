@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp.Data;
 
 namespace csharp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190312142737_AddVariableNetworkData")]
+    partial class AddVariableNetworkData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -340,6 +342,8 @@ namespace csharp.Data.Migrations
 
                     b.Property<float>("Bytes");
 
+                    b.Property<double>("Load");
+
                     b.Property<float>("Packets");
 
                     b.HasKey("SystemId", "CollectionDateTime");
@@ -427,29 +431,6 @@ namespace csharp.Data.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("SystemStorages");
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemStorageData", b =>
-                {
-                    b.Property<Guid>("SystemId");
-
-                    b.Property<DateTime>("CollectionDateTime");
-
-                    b.Property<float>("ByteReads");
-
-                    b.Property<float>("ByteWrites");
-
-                    b.Property<float>("Reads");
-
-                    b.Property<float>("Time");
-
-                    b.Property<float>("Transfers");
-
-                    b.Property<float>("Writes");
-
-                    b.HasKey("SystemId", "CollectionDateTime");
-
-                    b.ToTable("SystemStorageData");
                 });
 
             modelBuilder.Entity("csharp.Data.SystemType", b =>
@@ -825,14 +806,6 @@ namespace csharp.Data.Migrations
                     b.HasOne("csharp.Data.StorageType", "Type")
                         .WithMany("SystemStorages")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("csharp.Data.SystemStorageData", b =>
-                {
-                    b.HasOne("csharp.Data.System", "System")
-                        .WithMany("SystemStorageData")
-                        .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

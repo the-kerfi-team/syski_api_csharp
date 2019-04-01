@@ -81,13 +81,13 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.SaveChanges();
                     }
 
-                    var systemstorage = context.SystemStorages.Where(t => t.SystemId == system.Id && t.StorageModelId == storagemodel.Id).FirstOrDefault();
+                    var systemstorage = context.SystemStorages.Where(t => t.SystemId == system.Id && t.StorageModelId == storagemodel.Id && t.Slot == slot).FirstOrDefault();
                     if (systemstorage == null)
                     {
                         systemstorage = new SystemStorage
                         {
                             SystemId = system.Id,
-                            Slot = slot++,
+                            Slot = slot,
                             StorageModelId = storagemodel.Id,
                             InterfaceId = interfacetype.Id,
                             LastUpdated = lastUpdated
@@ -95,7 +95,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                         context.Add(systemstorage);
                         context.SaveChanges();
                     }
-
+                    slot++;
                 }
             }
         }

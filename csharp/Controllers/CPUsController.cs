@@ -43,6 +43,21 @@ namespace csharp.Controllers
             return Ok(CPUDTOs);
         }
 
+        [Authorize]
+        [HttpPost("/system/{systemId}/cpu/data")]
+        public async Task<IActionResult> GetCPUData(Guid systemId)
+        {
+            var applicationUserSystem = _context.ApplicationUserSystems
+                .Where(u => u.User.Email == ((ClaimsIdentity)User.Identity).FindFirst("email").Value && u.SystemId == systemId).FirstOrDefault();
+
+            if (applicationUserSystem == null)
+                return NotFound();
+
+            var CPUsData = _context.SystemCPUsData.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.CollectionDateTime).Take(1); ;
+
+            return Ok(CPUsData);
+        }
+
         private CPUDTO CreateDTO(SystemCPU systemCPU)
         {
             var processorModel = _context.CPUModels.Find(systemCPU.CPUModelID);
