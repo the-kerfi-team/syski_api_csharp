@@ -12,13 +12,13 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class StaticStorageHandler : ActionHandler
     {
 
-        public StaticStorageHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public StaticStorageHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
         }
 
         public override void HandleAction()
         {
-            var context = _ServiceProvider.GetService<ApplicationDbContext>();
+            var context = new ApplicationDbContext();
             var systemUUID = _ServiceProvider.GetService<WebSocketManager>().GetId(_WebSocket);
 
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();

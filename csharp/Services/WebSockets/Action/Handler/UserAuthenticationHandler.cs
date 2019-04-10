@@ -15,12 +15,12 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class UserAuthenticationHandler : ActionHandler
     {
 
-        public UserAuthenticationHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public UserAuthenticationHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
             
         }
 
-        public override void HandleAction()
+        public override async void HandleAction()
         {
             var userManager = _ServiceProvider.GetService<UserManager<ApplicationUser>>();
             ApplicationUser user = userManager.Users.SingleOrDefault(r => r.Email == (string)_Action.properties.SelectToken("email"));
@@ -49,9 +49,9 @@ namespace csharp.Services.WebSockets.Action.Handler
                     authJson.Add("system", system.Id);
                     authJson.Add("secret", system.Secret);
 
-                    SendMessageAsync(ActionFactory.createAction("authentication", authJson));
+                    await _WebSocket.sendAction("authentication", authJson);
 
-                    websocketManager.AddSocket(system.Id, _WebSocket);
+                    //websocketManager.AddSocket(system.Id, _WebSocket);
                 }
             }
 

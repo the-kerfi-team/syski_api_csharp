@@ -11,13 +11,13 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class StaticGPUHandler : ActionHandler
     {
 
-        public StaticGPUHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public StaticGPUHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
         }
 
         public override void HandleAction()
         {
-            var context = _ServiceProvider.GetService<ApplicationDbContext>();
+            var context = new ApplicationDbContext();
             var systemUUID = _ServiceProvider.GetService<WebSocketManager>().GetId(_WebSocket);
 
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();
@@ -74,6 +74,7 @@ namespace csharp.Services.WebSockets.Action.Handler
                 }
 
             }
+            context.Dispose();
         }
 
     }

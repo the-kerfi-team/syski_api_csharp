@@ -14,82 +14,36 @@ namespace csharp.Services.WebSockets
     public class WebSocketManager
     {
 
-        private Thread _Taskthread;
-        private ConcurrentDictionary<Guid, WebSocketData> _WebSockets = new ConcurrentDictionary<Guid, WebSocketData>();
+        private ConcurrentDictionary<Guid, WebSocketConnection> _WebSockets = new ConcurrentDictionary<Guid, WebSocketConnection>();
 
         public WebSocketManager()
         {
-            _Taskthread = new Thread(new ThreadStart(RunTasks));
-            _Taskthread.Start();
         }
 
-        public void RunTasks()
+        public ConcurrentDictionary<Guid, WebSocketConnection> GetWebSockets()
         {
-            while (true)
-            {
-                foreach (var WebSocket in _WebSockets)
-                {
-                    int taskCount = WebSocket.Value.countTasks();
-                    for (int i = 0; i < taskCount; i++)
-                    {
-                        ActionTask currentTask = null;
-                        try
-                        {
-                            currentTask = WebSocket.Value.nextTask();
-                            if (currentTask.runAtDateTime < DateTime.Now)
-                            {
-                                string sendAction = JsonConvert.SerializeObject(currentTask.action);
-                                currentTask.webSocket.SendAsync(buffer: new ArraySegment<byte>(array: Encoding.ASCII.GetBytes(sendAction), offset: 0, count: sendAction.Length), messageType: WebSocketMessageType.Text, endOfMessage: true, cancellationToken: CancellationToken.None);
-                                if (currentTask.repeat)
-                                {
-                                    currentTask.runAtDateTime = DateTime.Now.AddSeconds(currentTask.delay);
-                                    WebSocket.Value.addTask(currentTask);
-                                }
-                            }
-                            else
-                            {
-                                WebSocket.Value.addTask(currentTask);
-                            }
-                        }
-                        catch (InvalidOperationException)
-                        {
-                        }
-                    }
-                }
-            }
+            return _WebSockets;
         }
 
-        public WebSocket GetSocketById(Guid id)
+        public WebSocketConnection GetSocketById(Guid id)
         {
-            return (_WebSockets.FirstOrDefault(p => p.Key == id).Value == null ? null : _WebSockets.FirstOrDefault(p => p.Key == id).Value._WebSocket);
+            return _WebSockets.FirstOrDefault(p => p.Key == id).Value;
         }
 
 
-        public Guid GetId(WebSocket webSocket)
+        public Guid GetId(WebSocketConnection webSocket)
         {
-            return _WebSockets.FirstOrDefault(p => p.Value._WebSocket == webSocket).Key;
+            return _WebSockets.FirstOrDefault(p => p.Value == webSocket).Key;
         }
 
-        public void AddSocket(Guid id, WebSocket webSocket)
+        public async Task AddSocket(Guid id, WebSocketConnection webSocket)
         {
-            _WebSockets.TryAdd(id, new WebSocketData(webSocket));
+            _WebSockets.TryAdd(id, webSocket);
         }
 
         public async Task RemoveSocket(Guid id)
         {
-            WebSocketData webSocket;
-            _WebSockets.TryRemove(id, out webSocket);
-            if (webSocket != null)
-            {
-                try
-                {
-                    await webSocket._WebSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Closed by the Server", cancellationToken: CancellationToken.None);
-                }
-                catch (WebSocketException wse)
-                {
-
-                }
-            }
+            _WebSockets.TryRemove(id, out WebSocketConnection webSocket);
         }
 
     }

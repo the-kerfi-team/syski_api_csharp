@@ -18,10 +18,10 @@ namespace csharp.Services
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
 
-        public UserTokenManager(IConfiguration configuration, ApplicationDbContext context)
+        public UserTokenManager(IConfiguration configuration)
         {
             _configuration = configuration;
-            _context = context;
+            _context = new ApplicationDbContext();
         }
 
         public Token CreateToken(ApplicationUser user, ref string refreshToken)
@@ -61,7 +61,7 @@ namespace csharp.Services
 
         public bool CheckValidRefreshToken(string refreshToken, string tokenId)
         {
-            return _context.Tokens.Where(t => t.Id == new Guid(tokenId) && t.Active && t.RefreshToken == refreshToken).Any();
+            return _context.Tokens.Any(t => t.Id == new Guid(tokenId) && t.Active && t.RefreshToken == refreshToken);
         }
 
         private void SetPreviousToken(ref Token nextToken, ref Token previousToken)
@@ -87,7 +87,7 @@ namespace csharp.Services
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 Subject = user.Email,
-                Expires = DateTime.Now.AddMinutes(30),
+                Expires = DateTime.Now.AddDays(30),
                 NotBefore = DateTime.Now,
                 RefreshToken = refreshToken,
                 Active = true

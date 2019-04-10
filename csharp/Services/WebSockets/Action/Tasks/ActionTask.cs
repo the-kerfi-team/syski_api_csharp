@@ -9,15 +9,13 @@ namespace csharp.Services.WebSockets.Action.Tasks
     public class ActionTask
     {
 
-        public Action action { get; set; }
+        public Action Action { get; set; }
 
-        public WebSocket webSocket { get; set; }
+        public DateTime RunAtDateTime { get; set; }
 
-        public DateTime runAtDateTime { get; set; }
+        public int Delay { get; set; }
 
-        public int delay { get; set; }
-
-        public bool repeat { get; set; }
+        public bool Repeat { get; set; }
 
     }
 }

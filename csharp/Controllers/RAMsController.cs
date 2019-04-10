@@ -16,9 +16,9 @@ namespace csharp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public RAMsController(ApplicationDbContext context)
+        public RAMsController()
         {
-            _context = context;
+            _context = new ApplicationDbContext();
         }
 
         [Authorize]
@@ -31,6 +31,7 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
+            // Could be null?
             DateTime lastUpdated = _context.SystemRAMs.Where(sc => sc.SystemId == systemId).OrderByDescending(i => i.LastUpdated).FirstOrDefault().LastUpdated;
             var RAMs = _context.SystemRAMs.Where(sc => sc.SystemId == systemId && sc.LastUpdated == lastUpdated).ToList();
 

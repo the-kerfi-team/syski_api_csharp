@@ -12,23 +12,18 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class SystemAuthenticationHandler : ActionHandler
     {
 
-        public SystemAuthenticationHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public SystemAuthenticationHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
 
         }
 
-        public override void HandleAction()
+        public override async void HandleAction()
         {
-            var context = _ServiceProvider.GetService<ApplicationDbContext>();
+            var context = new ApplicationDbContext();
             var system = context.Systems.Where(s => s.Id == Guid.Parse((string)_Action.properties.SelectToken("system")) && s.Secret == (string)_Action.properties.SelectToken("secret")).FirstOrDefault();
             if (system != null)
             {
                 var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
-                var previousSocket = websocketManager.GetSocketById(system.Id);
-                if (previousSocket != null)
-                {
-                    websocketManager.RemoveSocket(system.Id);
-                }
                 websocketManager.AddSocket(system.Id, _WebSocket);
             }
         }
