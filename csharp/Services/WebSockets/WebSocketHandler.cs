@@ -28,7 +28,6 @@ namespace csharp.Services.WebSockets
 
         public async Task OnConnected(WebSocketConnection webSocket)
         {
-            //_WebSocketManager.AddSocket(webSocket.Id, webSocket);
             webSocket.sendAction("authentication");
         }
 
@@ -69,10 +68,6 @@ namespace csharp.Services.WebSockets
                 webSocketConnection.CloseStatusDescription = webSocketReceiveResult.CloseStatusDescription;
             }
             catch (WebSocketException wsex) when (wsex.WebSocketErrorCode == WebSocketError.ConnectionClosedPrematurely)
-            {
-
-            }
-            catch (TaskCanceledException tce)
             {
 
             }

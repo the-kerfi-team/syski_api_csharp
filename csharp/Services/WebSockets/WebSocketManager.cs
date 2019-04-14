@@ -15,6 +15,7 @@ namespace csharp.Services.WebSockets
     {
 
         private ConcurrentDictionary<Guid, WebSocketConnection> _WebSockets = new ConcurrentDictionary<Guid, WebSocketConnection>();
+        private ConcurrentDictionary<Guid, Guid> _WebSocketSystem = new ConcurrentDictionary<Guid, Guid>();
 
         public WebSocketManager()
         {
@@ -30,10 +31,14 @@ namespace csharp.Services.WebSockets
             return _WebSockets.FirstOrDefault(p => p.Key == id).Value;
         }
 
-
         public Guid GetId(WebSocketConnection webSocket)
         {
             return _WebSockets.FirstOrDefault(p => p.Value == webSocket).Key;
+        }
+
+        public Guid GetWebSocketIdFromSystemId(Guid systemId)
+        {
+            return _WebSocketSystem.FirstOrDefault(p => p.Value.Equals(systemId)).Key;
         }
 
         public async Task AddSocket(Guid id, WebSocketConnection webSocket)
@@ -44,6 +49,12 @@ namespace csharp.Services.WebSockets
         public async Task RemoveSocket(Guid id)
         {
             _WebSockets.TryRemove(id, out WebSocketConnection webSocket);
+            _WebSocketSystem.TryRemove(id, out Guid systemId);
+        }
+
+        public async Task AddSystemToSocketLink(Guid webSocketId, Guid systemId)
+        {
+            _WebSocketSystem.TryAdd(webSocketId, systemId);
         }
 
     }

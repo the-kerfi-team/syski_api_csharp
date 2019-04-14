@@ -116,6 +116,8 @@ namespace csharp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddHostedService<WebSocketTaskScheduler>();
+
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<UserTokenManager>();
             services.AddSingleton<Services.WebSockets.WebSocketManager>();

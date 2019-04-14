@@ -24,7 +24,8 @@ namespace csharp.Services.WebSockets.Action.Handler
             if (system != null)
             {
                 var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
-                websocketManager.AddSocket(system.Id, _WebSocket);
+                websocketManager.AddSocket(_WebSocket.Id, _WebSocket);
+                websocketManager.AddSystemToSocketLink(_WebSocket.Id, system.Id);
             }
         }
     }
