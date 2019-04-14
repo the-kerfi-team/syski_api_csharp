@@ -57,8 +57,7 @@ namespace csharp.Services.WebSockets
                     }
                     catch (JsonReaderException e)
                     {
-                        var properties = new JObject();
-                        properties.Add("message", "Invalid message format sent");
+                        var properties = new JObject {{"message", "Invalid message format sent"}};
                         await webSocketConnection.sendAction("error", properties);
                     }
                     webSocketReceiveResult = await webSocketConnection.WebSocket.ReceiveAsync(new ArraySegment<byte>(receivePayloadBuffer), webSocketConnection.GetCancellationToken());

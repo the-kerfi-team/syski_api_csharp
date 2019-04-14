@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
-using csharp.Services.WebSockets.Action.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -31,9 +31,10 @@ namespace csharp.Services.WebSockets.Action.Handler
                 {
                     var websocketManager = _ServiceProvider.GetService<WebSocketManager>();
                     var context = _ServiceProvider.GetService<ApplicationDbContext>();
-                    var system = new Data.System();
-                    system.LastUpdated = DateTime.Now;
-                    system.Secret = Guid.NewGuid().ToString().Replace("-", "");
+                    var system = new Data.System
+                    {
+                        LastUpdated = DateTime.Now, Secret = Guid.NewGuid().ToString().Replace("-", "")
+                    };
                     context.Add(system);
                     context.SaveChanges();
 
@@ -45,13 +46,18 @@ namespace csharp.Services.WebSockets.Action.Handler
                     context.Add(applicationUserSystems);
                     context.SaveChanges();
 
-                    var authJson = new JObject();
-                    authJson.Add("system", system.Id);
-                    authJson.Add("secret", system.Secret);
+                    var authJson = new JObject {{"system", system.Id}, {"secret", system.Secret}};
 
                     await _WebSocket.sendAction("authentication", authJson);
 
-                    //websocketManager.AddSocket(system.Id, _WebSocket);
+                    websocketManager.AddSocket(_WebSocket.Id, _WebSocket);
+                    websocketManager.AddSystemToSocketLink(_WebSocket.Id, system.Id);
+                    string[] actions = { "staticsystem", "staticcpu", "staticram", "staticos", "staticgpu", "staticmotherboard", "staticstorage", "staticbios" };
+                    foreach (string action in actions)
+                    {
+                        _WebSocket.sendAction(action);
+                        Thread.Sleep(100);
+                    }
                 }
             }
 
