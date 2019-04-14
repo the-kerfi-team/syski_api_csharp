@@ -11,7 +11,7 @@ namespace csharp.Services.WebSockets.Action
     public class ActionFactory
     {
 
-        public static ActionHandler createActionHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action)
+        public static ActionHandler createActionHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action)
         {
             ActionHandler result = null;
             switch (action.action)

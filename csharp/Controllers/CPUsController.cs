@@ -16,9 +16,9 @@ namespace csharp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public CPUsController(ApplicationDbContext context)
+        public CPUsController()
         {
-            _context = context;
+            _context = new ApplicationDbContext();
         }
 
         [Authorize]

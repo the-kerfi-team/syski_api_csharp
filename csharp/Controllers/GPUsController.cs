@@ -16,9 +16,9 @@ namespace csharp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public GPUsController(ApplicationDbContext context)
+        public GPUsController()
         {
-            _context = context;
+            _context = new ApplicationDbContext();
         }
 
         [Authorize]

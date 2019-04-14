@@ -12,14 +12,14 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class StaticSystemHandler : ActionHandler
     {
 
-        public StaticSystemHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public StaticSystemHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
 
         }
 
         public override void HandleAction()
         {
-            var context = _ServiceProvider.GetService<ApplicationDbContext>();
+            var context = new ApplicationDbContext();
             var systemUUID = _ServiceProvider.GetService<WebSocketManager>().GetId(_WebSocket);
 
             var system = context.Systems.Where(u => u.Id == systemUUID).FirstOrDefault();

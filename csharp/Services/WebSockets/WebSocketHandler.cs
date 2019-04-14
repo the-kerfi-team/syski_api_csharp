@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using csharp.Data;
+using Newtonsoft.Json.Linq;
 
 namespace csharp.Services.WebSockets
 {
@@ -24,61 +26,81 @@ namespace csharp.Services.WebSockets
             _WebSocketManager = serviceProvider.GetService<WebSocketManager>();
         }
 
-        public virtual async Task OnConnected(WebSocket webSocket)
+        public async Task OnConnected(WebSocketConnection webSocket)
         {
-            int maxTries = 3;
-            var buffer = new byte[1024 * 4];
-            int tries = 0;
-            bool authenticated = false;
+            webSocket.sendAction("authentication");
+        }
 
-            Action.Action action = null;
-            while (!(authenticated || tries >= maxTries))
+        public async Task OnDisconnected(WebSocketConnection webSocketConnection)
+        {
+            _WebSocketManager.RemoveSocket(webSocketConnection.Id);
+            if (webSocketConnection.CloseStatus.HasValue)
             {
-                await SendMessageAsync(webSocket, JsonConvert.SerializeObject(ActionFactory.createAction("authentication")));
-                WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                action = JsonConvert.DeserializeObject<Action.Action>(Encoding.UTF8.GetString(buffer, 0, result.Count));
-                ActionFactory.createActionHandler(_ServiceProvider, webSocket, action).HandleAction();
-                authenticated = (_WebSocketManager.GetId(webSocket) != Guid.Empty);
-                tries++;
+                await webSocketConnection.WebSocket.CloseAsync(webSocketConnection.CloseStatus.Value, webSocketConnection.CloseStatusDescription, CancellationToken.None);
             }
+        }
 
-            if (tries >= maxTries)
+        public async Task OnReceiveMessage(WebSocketConnection webSocketConnection)
+        {
+            try
             {
-                try
+                byte[] receivePayloadBuffer = new byte[4 * 1024];
+                WebSocketReceiveResult webSocketReceiveResult = await webSocketConnection.WebSocket.ReceiveAsync(new ArraySegment<byte>(receivePayloadBuffer), webSocketConnection.GetCancellationToken());
+                webSocketConnection.ResetCancelationToken();
+                while (webSocketReceiveResult.MessageType != WebSocketMessageType.Close)
                 {
-                    await webSocket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure, statusDescription: "Failed Authentication", cancellationToken: CancellationToken.None);
+                    byte[] result = await ReceiveMessagePayloadAsync(webSocketConnection.WebSocket, webSocketReceiveResult, receivePayloadBuffer);
+                    try
+                    {
+                        Action.Action action = JsonConvert.DeserializeObject<Action.Action>(Encoding.UTF8.GetString(result, 0, result.Length));
+                        ActionFactory.createActionHandler(_ServiceProvider, webSocketConnection, action).HandleAction();
+                    }
+                    catch (JsonReaderException e)
+                    {
+                        var properties = new JObject {{"message", "Invalid message format sent"}};
+                        await webSocketConnection.sendAction("error", properties);
+                    }
+                    webSocketReceiveResult = await webSocketConnection.WebSocket.ReceiveAsync(new ArraySegment<byte>(receivePayloadBuffer), webSocketConnection.GetCancellationToken());
+                    webSocketConnection.ResetCancelationToken();
                 }
-                catch (WebSocketException wse)
-                {
-
-                }
+                webSocketConnection.CloseStatus = webSocketReceiveResult.CloseStatus.Value;
+                webSocketConnection.CloseStatusDescription = webSocketReceiveResult.CloseStatusDescription;
             }
-
-        }
-
-        public virtual async Task OnDisconnected(WebSocket webSocket)
-        {
-            await _WebSocketManager.RemoveSocket(_WebSocketManager.GetId(webSocket));
-        }
-
-        public async Task SendMessageAsync(WebSocket webSocket, string message)
-        {
-            if (webSocket.State == WebSocketState.Open)
+            catch (WebSocketException wsex) when (wsex.WebSocketErrorCode == WebSocketError.ConnectionClosedPrematurely)
             {
-                await webSocket.SendAsync(buffer: new ArraySegment<byte>(array: Encoding.ASCII.GetBytes(message), offset: 0, count: message.Length), messageType: WebSocketMessageType.Text, endOfMessage: true, cancellationToken: CancellationToken.None);
+
+            }
+            catch (OperationCanceledException oce)
+            {
+
             }
         }
 
-        public async Task SendMessageAsync(Guid Id, string message)
+        private static async Task<byte[]> ReceiveMessagePayloadAsync(WebSocket webSocket, WebSocketReceiveResult webSocketReceiveResult, byte[] receivePayloadBuffer)
         {
-            await SendMessageAsync(_WebSocketManager.GetSocketById(Id), message);
+            byte[] messagePayload = null;
+
+            if (webSocketReceiveResult.EndOfMessage)
+            {
+                messagePayload = new byte[webSocketReceiveResult.Count];
+                Array.Copy(receivePayloadBuffer, messagePayload, webSocketReceiveResult.Count);
+            }
+            else
+            {
+                using (MemoryStream messagePayloadStream = new MemoryStream())
+                {
+                    messagePayloadStream.Write(receivePayloadBuffer, 0, webSocketReceiveResult.Count);
+                    while (!webSocketReceiveResult.EndOfMessage)
+                    {
+                        webSocketReceiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(receivePayloadBuffer), CancellationToken.None);
+                        messagePayloadStream.Write(receivePayloadBuffer, 0, webSocketReceiveResult.Count);
+                    }
+                    messagePayload = messagePayloadStream.ToArray();
+                }
+            }
+            return messagePayload;
         }
 
-        public void ReceiveAsync(WebSocket webSocket, WebSocketReceiveResult result, byte[] buffer)
-        {
-            Action.Action action = JsonConvert.DeserializeObject<Action.Action>(Encoding.UTF8.GetString(buffer, 0, result.Count));
-            ActionFactory.createActionHandler(_ServiceProvider, webSocket, action).HandleAction();
-        }
     }
 
 }

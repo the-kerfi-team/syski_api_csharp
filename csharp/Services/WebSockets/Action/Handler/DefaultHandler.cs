@@ -10,15 +10,15 @@ namespace csharp.Services.WebSockets.Action.Handler
     public class DefaultHandler : ActionHandler
     {
 
-        public DefaultHandler(IServiceProvider serviceProvider, WebSocket webSocket, Action action) : base(serviceProvider, webSocket, action)
+        public DefaultHandler(IServiceProvider serviceProvider, WebSocketConnection webSocket, Action action) : base(serviceProvider, webSocket, action)
         {
         }
 
-        public override void HandleAction()
+        public override async void HandleAction()
         {
             var properties = new JObject();
             properties.Add("message", "Invalid Action Sent");
-            this.SendMessageAsync(ActionFactory.createAction("error", properties));
+            await _WebSocket.sendAction("error", properties);
         }
 
     }

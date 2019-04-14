@@ -16,9 +16,9 @@ namespace csharp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public OSsController(ApplicationDbContext context)
+        public OSsController()
         {
-            _context = context;
+            _context = new ApplicationDbContext();
         }
 
         [Authorize]

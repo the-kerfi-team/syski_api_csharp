@@ -12,12 +12,12 @@ namespace csharp.Services.WebSockets
     {
 
         private readonly RequestDelegate _next;
-        private readonly WebSocketHandler _WebSocketHandler;
+        private readonly WebSocketHandler _webSocketHandler;
 
-        public WebSocketMiddleware(RequestDelegate next, WebSocketHandler WebSocketHandler)
+        public WebSocketMiddleware(RequestDelegate next, WebSocketHandler webSocketHandler)
         {
             _next = next;
-            _WebSocketHandler = WebSocketHandler;
+            _webSocketHandler = webSocketHandler;
         }
 
         public async Task Invoke(HttpContext context)
@@ -25,25 +25,13 @@ namespace csharp.Services.WebSockets
             if (context.WebSockets.IsWebSocketRequest)
             {
                 var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                await _WebSocketHandler.OnConnected(webSocket);
-                await Receive(webSocket, async (result, buffer) =>
-                {
-                    if (result.MessageType == WebSocketMessageType.Text)
-                    {
-                        try
-                        {
-                            _WebSocketHandler.ReceiveAsync(webSocket, result, buffer);
-                        }
-                        catch (WebSocketException wse)
-                        {
-                            await _WebSocketHandler.OnDisconnected(webSocket);
-                        }
-                    }
-                    else if (result.MessageType == WebSocketMessageType.Close)
-                    {
-                        await _WebSocketHandler.OnDisconnected(webSocket);
-                    }
-                });
+                WebSocketConnection webSocketConnection = new WebSocketConnection(webSocket);
+
+                await _webSocketHandler.OnConnected(webSocketConnection);
+
+                await _webSocketHandler.OnReceiveMessage(webSocketConnection);
+
+                await _webSocketHandler.OnDisconnected(webSocketConnection);
             }
             else
             {
@@ -51,22 +39,6 @@ namespace csharp.Services.WebSockets
             }
         }
 
-        private async Task Receive(WebSocket webSocket, Action<WebSocketReceiveResult, byte[]> handleMessage)
-        {
-            var buffer = new byte[1024 * 4];
-            while (webSocket.State == WebSocketState.Open)
-            {
-                try
-                {
-                    var result = await webSocket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
-                    handleMessage(result, buffer);
-                }
-                catch (WebSocketException wse)
-                {
-                    await _WebSocketHandler.OnDisconnected(webSocket);
-                }
-            }
-        }
-    }
 
+    }
 }

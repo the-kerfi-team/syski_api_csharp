@@ -22,9 +22,9 @@ namespace csharp.Controllers
         private readonly ApplicationDbContext _context;
         private readonly WebSocketManager _socketManager;
 
-        public CommandsController(ApplicationDbContext context, WebSocketManager WebSocketManager)
+        public CommandsController(WebSocketManager WebSocketManager)
         {
-            _context = context;
+            _context = new ApplicationDbContext();
             _socketManager = WebSocketManager;
         }
 
@@ -38,14 +38,12 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            WebSocket websocket = _socketManager.GetSocketById(systemId);
+            WebSocketConnection websocket = _socketManager.GetSocketById(systemId);
             if (websocket == null)
             {
                 return NotFound();
             }
-
-            string shutdownAction = JsonConvert.SerializeObject(ActionFactory.createAction("shutdown"));
-            websocket.SendAsync(buffer: new ArraySegment<byte>(array: Encoding.ASCII.GetBytes(shutdownAction), offset: 0, count: shutdownAction.Length), messageType: WebSocketMessageType.Text, endOfMessage: true, cancellationToken: CancellationToken.None);
+            websocket.sendAction("shutdown");
 
             return Ok();
         }
@@ -60,14 +58,12 @@ namespace csharp.Controllers
             if (applicationUserSystem == null)
                 return NotFound();
 
-            WebSocket websocket = _socketManager.GetSocketById(systemId);
+            WebSocketConnection websocket = _socketManager.GetSocketById(systemId);
             if (websocket == null)
             {
                 return NotFound();
             }
-
-            string shutdownAction = JsonConvert.SerializeObject(ActionFactory.createAction("restart"));
-            websocket.SendAsync(buffer: new ArraySegment<byte>(array: Encoding.ASCII.GetBytes(shutdownAction), offset: 0, count: shutdownAction.Length), messageType: WebSocketMessageType.Text, endOfMessage: true, cancellationToken: CancellationToken.None);
+            websocket.sendAction("restart");
 
             return Ok();
         }
