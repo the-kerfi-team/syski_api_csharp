@@ -46,7 +46,7 @@ namespace Syski.API.Controllers
 
             var pingData = context.SystemPingData.Where(sc => sc.SystemId.Equals(systemId)).OrderByDescending(i => i.CollectionDateTime).FirstOrDefault();
 
-            if (pingData == null || pingData.CollectionDateTime.AddSeconds(9) < DateTime.Now)
+            if (pingData == null || pingData.CollectionDateTime.AddSeconds(30) < DateTime.Now)
             {
                 return NotFound();
             }
