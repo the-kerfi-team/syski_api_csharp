@@ -1,0 +1,21 @@
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM microsoft/dotnet:2.1-sdk AS build
+WORKDIR /src
+COPY ["uk.co.syski.api/Syski.API.csproj", "uk.co.syski.api/"]
+COPY ["uk.co.syski.data/Syski.Data.csproj", "uk.co.syski.data/"]
+RUN dotnet restore "uk.co.syski.api/Syski.API.csproj"
+COPY . .
+WORKDIR "/src/uk.co.syski.api"
+RUN dotnet build "Syski.API.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "Syski.API.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "Syski.API.dll"]
