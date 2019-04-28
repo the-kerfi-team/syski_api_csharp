@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190416102004_Initial.cs" />
+    <Compile Remove="Migrations\20190416111048_Initial.cs" />
+    <Compile Remove="Migrations\20190416181930_Initial.cs" />
+    <Compile Remove="Migrations\20190417083730_Initial.cs" />
+    <Compile Remove="Migrations\20190417144258_Initial.cs" />
+    <Compile Remove="Migrations\20190417193647_Initial.cs" />
+    <Compile Remove="Migrations\20190418094433_Initial.cs" />
+    <Compile Remove="Migrations\20190418102855_Initial.cs" />
+    <Compile Remove="Migrations\20190418161747_Initial.cs" />
+    <Compile Remove="Migrations\20190418165129_Initial.cs" />
+    <Compile Remove="Migrations\20190419160309_Initial.cs" />
+    <Compile Remove="Migrations\20190420125857_Initial.cs" />
+    <Compile Remove="Migrations\20190420145209_Initial.cs" />
+    <Compile Remove="Migrations\20190421065040_Initial.cs" />
+    <Compile Remove="Migrations\20190423140352_Initial.cs" />
+    <Compile Remove="Migrations\20190423141900_Initial.cs" />
+    <Compile Remove="Migrations\20190423142627_Initial.cs" />
+    <Compile Remove="Migrations\20190423150437_Initial.cs" />
+    <Compile Remove="Migrations\20190423224547_Initial.cs" />
+    <Compile Remove="Migrations\20190424112356_Initial.cs" />
+    <Compile Remove="Migrations\20190427115633_Initial.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.8" />
+  </ItemGroup>
+
+</Project>
